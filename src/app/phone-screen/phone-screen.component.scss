@@ -1,0 +1,42 @@
+$height: 95vh;
+
+.screen {
+    margin-left: auto;
+    margin-right: auto;
+    height: $height;
+    width: $height * calc(9 / 18);
+    border-radius: 3rem;
+    background-color: white;
+    margin-top: 1em;
+    left: 0;
+    right: 0;
+    position: absolute;
+    border: .5rem black solid;
+}
+
+.background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: darkgrey;
+    margin-top: 0;
+    padding: 0;
+}
+
+.system-text {
+    font-weight: bold;
+}
+
+.sys-bar {
+    display: flex;
+    justify-content: space-between;
+    padding-top: .8em;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.icons>span {
+    font-size: larger;
+    font-weight: bolder;
+    padding-left: .2em;
+}

@@ -1,0 +1,163 @@
+// $primary: #B3B6E3;
+// $primary-light:#D8D5ED;
+$primary:#1F2F16;
+$primary-light:#395B50;
+$secondary: lightgrey;
+$black: darkgray;
+$sys-bg: white;
+
+.header {
+    border-bottom: .01rem $black solid;
+    // position: absolute;
+    // left: 0;
+    // right: 0;
+    // top: 0;
+}
+
+.contact {
+    font-size: 1.1rem;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+.frosted-glass {
+    border: none;
+    background-color: rgba(255, 255, 255, .15);
+    backdrop-filter: blur(10px);
+}
+
+.scroll {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 73vh;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+.reverse {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.container {
+    padding: .5rem;
+    margin: .5rem;
+    padding-right: .3rem;
+    margin-right: 0;
+    padding-bottom: 2rem;
+}
+
+.message {
+    border-radius: 1.2rem;
+    padding: .5rem;
+    margin-bottom: .1rem;
+    padding-left: .8rem;
+    float: left;
+    min-width: 2.5rem;
+    text-align: left;
+    transition: border-radius .5s;
+}
+
+.message.primary {
+    // background-color: $primary;
+    background-image: linear-gradient($primary-light, $primary);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+.message.secondary {
+    background-color: $secondary;
+    color: black;
+    padding-right: .8rem;
+}
+
+.response-box {
+    height: 20vh;
+    // margin-bottom: 2rem;
+    padding-top: 2rem;
+    border-bottom-left-radius: 2.5rem;
+    border-bottom-right-radius: 2.5rem;
+    background: linear-gradient(0deg, $sys-bg 85%, rgba($sys-bg, 0) 100%);
+}
+
+.inside {
+    //gradiant
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(0deg, $sys-bg 6%, rgba($sys-bg, 0) 13%);
+    border-bottom-left-radius: 2.5rem;
+    border-bottom-right-radius: 2.5rem;
+    pointer-events: none;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 2rem;
+}
+
+.padding {
+    height: 20vh;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.w-90 {
+    width: 90% !important;
+}
+
+.relative {
+    position: relative;
+}
+
+.response-button {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.system {
+    font-size: smaller;
+    font-weight: bold;
+}
+
+.mid-end {
+    border-bottom-right-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+}
+
+.mid-start {
+    border-bottom-left-radius: 0.3rem;
+    border-top-left-radius: 0.3rem;
+}
+
+.bottom-end {
+    border-top-right-radius: 0.3rem;
+    margin-bottom: .5rem;
+}
+
+.bottom-start {
+    border-top-left-radius: 0.3rem;
+    margin-bottom: .5rem;
+}
+
+.top-end {
+    border-bottom-right-radius: 0.3rem;
+}
+
+.top-start {
+    border-bottom-left-radius: 0.3rem;
+}
+
+.none-start,
+.none-end {
+    margin-bottom: .5rem;
+}

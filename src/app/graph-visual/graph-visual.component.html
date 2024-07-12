@@ -1,0 +1,9 @@
+<list-view [nodes]="visualNodes"></list-view>
+<main class="main">
+    @for (node of visualNodes; track node.id) {
+        <node [text]="node.id" [x]="node.x" [y]="node.y" [classList]="node.classList"></node>
+    }
+    @for (path of paths; track path) {
+        <edge [pathDefinition]="path"></edge>
+    }
+</main>

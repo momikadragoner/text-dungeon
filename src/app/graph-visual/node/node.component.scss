@@ -1,0 +1,36 @@
+$primary: blue;
+$primary-dark: darkblue;
+$secondary: lightgrey;
+$tertary: lightgreen;
+
+.primary {
+    background-color: $primary;
+    color: white;
+    border: .1rem $primary-dark solid;
+}
+
+.secondary {
+    background-color: $secondary;
+    color: black;
+}
+
+.tertary {
+    background-color: $tertary;
+    color: black;
+}
+
+.node {
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 1rem;
+    z-index: 10;
+}
+
+.text {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

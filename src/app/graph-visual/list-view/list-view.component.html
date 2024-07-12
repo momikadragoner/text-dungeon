@@ -1,0 +1,33 @@
+@for (node of nodes; track node.id) {
+<mat-card class="example-card" appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>{{node.id}}</mat-card-title>
+        <mat-card-subtitle>Node</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <table>
+            <tr>
+                <td> Distance </td>
+                <td> {{node.distance}} </td>
+            </tr>
+            <tr>
+                <td> Parent </td>
+                <td> {{node.parent}} </td>
+            </tr>
+            <tr>
+                <td> Color </td>
+                <td> {{node.color}} </td>
+            </tr>
+        </table>
+        Adjacent nodes:
+        <ul>
+            @for (e of node.edges; track $index) {
+            <li>{{e}}</li>
+            }
+        </ul>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button>EDIT</button>
+    </mat-card-actions>
+</mat-card>
+}
