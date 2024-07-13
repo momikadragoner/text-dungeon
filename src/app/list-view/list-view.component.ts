@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { VisualNode } from '../model/visualNode.model';
+import { VisualNode } from '../graph/models/visualNode.model';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({

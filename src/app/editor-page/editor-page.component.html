@@ -1,0 +1,18 @@
+<mat-drawer-container class="main">
+    <mat-drawer mode="side" position="end" opened>
+        <mat-toolbar>
+            <button mat-icon-button>
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </button>
+            <span class="title">Nodes</span>
+          </mat-toolbar>
+        <div class="container">
+            <list-view [nodes]="visualNodes"></list-view>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <graph-visual [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
+    </mat-drawer-content>
+</mat-drawer-container>

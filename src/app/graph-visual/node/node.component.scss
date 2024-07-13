@@ -1,4 +1,4 @@
-$primary: blue;
+$primary: #395B50;
 $primary-dark: darkblue;
 $secondary: lightgrey;
 $tertary: lightgreen;
@@ -6,7 +6,7 @@ $tertary: lightgreen;
 .primary {
     background-color: $primary;
     color: white;
-    border: .1rem $primary-dark solid;
+    // border: .1rem $primary-dark solid;
 }
 
 .secondary {
@@ -23,7 +23,7 @@ $tertary: lightgreen;
     position: absolute;
     text-align: center;
     vertical-align: middle;
-    border-radius: 1rem;
+    border-radius: 2rem;
     z-index: 10;
 }
 
