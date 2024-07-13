@@ -1,16 +1,24 @@
 <mat-drawer-container class="main">
-    <mat-drawer mode="side" position="end" opened>
+    <mat-drawer mode="side" position="end" [opened]="isDrawerOpen">
         <mat-toolbar>
-            <button mat-icon-button>
+            <button (click)="isDrawerOpen = false" mat-icon-button>
                 <span class="material-symbols-outlined">
                     close
                 </span>
             </button>
-            <span class="title">Nodes</span>
-          </mat-toolbar>
-        <div class="container">
-            <list-view [nodes]="visualNodes"></list-view>
-        </div>
+            <span class="title">Overview</span>
+        </mat-toolbar>
+        <mat-accordion>
+            <div class="container">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title> Nodes </mat-panel-title>
+                        <!-- <mat-panel-description> This is a summary of the content </mat-panel-description> -->
+                    </mat-expansion-panel-header>
+                    <list-view [nodes]="visualNodes"></list-view>
+                </mat-expansion-panel>
+            </div>  
+        </mat-accordion>
     </mat-drawer>
     <mat-drawer-content>
         <graph-visual [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>

@@ -5,6 +5,7 @@ import { ListViewComponent } from "../list-view/list-view.component";
 import { Node } from '../graph/models/node.model';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { GraphService } from '../graph/services/graph.service';
 import { nodeStyle } from '../graph/models/nodeStyle.model';
 import { edgeStyle } from '../graph/models/edgeStyle.model';
@@ -18,6 +19,7 @@ import { VisualEdge } from '../graph/models/visualEdge.model';
     MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
+    MatExpansionModule,
     GraphVisualComponent,
     ListViewComponent
 ],
@@ -25,6 +27,7 @@ import { VisualEdge } from '../graph/models/visualEdge.model';
   styleUrl: './editor-page.component.scss'
 })
 export class EditorPageComponent implements OnInit{
+
   nodes: Node[] = [
     { id: 'start', edges: ['1', '2'] },
     { id: '1', edges: ['3', '4'] },
@@ -32,15 +35,21 @@ export class EditorPageComponent implements OnInit{
     { id: '3', edges: [] },
     { id: '4', edges: ['5'] },
     { id: '5', edges: [] },
+    { id: '6', edges: ['7', '8'] },
+    { id: '7', edges: [] },
+    { id: '8', edges: [] },
+    { id: '9', edges: [] },
   ];
 
   graphService:GraphService;
 
-  nodeStyle: nodeStyle = { height: '80px', width: '80px', margin: '50px', classList: 'primary' };
+  nodeStyle: nodeStyle = { height: '80px', width: '80px', margin: '50px', classList: '' };
   edgeStyle: edgeStyle = { strokeColor: 'black', strokeWidth: '4' };
 
   visualNodes: VisualNode[] = [];
   visualEdges: VisualEdge[] = [];
+
+  isDrawerOpen:boolean = true;
 
   constructor(graphService:GraphService) {
     this.graphService = graphService; 
@@ -49,5 +58,7 @@ export class EditorPageComponent implements OnInit{
   ngOnInit(): void {
     this.visualNodes = this.graphService.computeVisualNodes(this.nodes, this.nodeStyle);
     this.visualEdges = this.graphService.computeVisualEdges(this.visualNodes, this.edgeStyle);
+    console.log(this.visualNodes);
+    
   }
 }
