@@ -1,8 +1,8 @@
-import { Node } from "./node.model";
+import { VisualNode } from "./visualNode.model";
 
 export interface VisualEdge {
-    start: Node;
-    end: Node;
+    start: VisualNode;
+    end: VisualNode;
     path?: string;
     strokeColor?: string;
     strokeWidth?: string;

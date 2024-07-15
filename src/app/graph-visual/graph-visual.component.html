@@ -1,7 +1,7 @@
 <main class="main">
     @for (node of visualNodes; track node.id) {
     <node (mousedown)="nodeMouseDown(node.id, $event)" (mouseup)="nodeMouseUp($event)" [text]="node.id" [x]="node.x"
-        [y]="node.y" [classList]="node.classList"></node>
+        [y]="node.y" [width]="node.width" [height]="node.height" [classList]="node.classList"></node>
     }
     @for (edge of visualEdges; track edge.start.id + edge.end.id) {
     <edge [pathDefinition]="edge.path" [strokeColor]="edge.strokeColor" [strokeWidth]="edge.strokeWidth"></edge>

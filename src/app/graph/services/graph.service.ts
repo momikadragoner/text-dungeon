@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { VisualNode } from '../models/visualNode.model';
 import { Node } from '../models/node.model';
 import { nodeStyle } from '../models/nodeStyle.model';
 import { edgeStyle } from '../models/edgeStyle.model';
 import { VisualEdge } from '../models/visualEdge.model';
 import { Edge } from '../models/edge.model';
+import { SlicePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class GraphService {
     // run bfs and separate into groups
     let group = 1;
     let s = startNode;
-    const nodes: VisualNode[] = [];
+    let nodes: VisualNode[] = [];
     while (nodes.length < graph.length) {
       let isStartSet = false;
       this.bfs(graph, s).forEach(n => {
@@ -31,7 +32,7 @@ export class GraphService {
           n.group = group;
           nodes.push(n);
         }
-        else if (!nodes.some(x => x.id == n.id) && !isStartSet){
+        else if (!nodes.some(x => x.id == n.id) && !isStartSet) {
           s = n.id;
           isStartSet = true;
         }
@@ -43,6 +44,9 @@ export class GraphService {
     let dist = 0;
     let grp = 1;
     let level = 0;
+    nodes.sort((a, b) => this.sortByGroupThenDistance(a.group, b.group, a.distance, b.distance));
+    console.log({sorted: nodes});
+    
     nodes.forEach(w => {
       if (w.distance != undefined && w.group != undefined) {
 
@@ -53,12 +57,12 @@ export class GraphService {
           level++;
           i = 0;
         }
-        const x = i * (width + margin);
-        const y = level * (height + margin);
+        const x = i * (width + margin) + margin;
+        const y = level * (height + margin) + margin;
 
         // set style based on group
         let classes = '' + styleObj.classList;
-        if (w.group == undefined ) {
+        if (w.group == undefined) {
           classes += ' primary';
         } else if (w.group % 3 == 0) {
           classes += ' tertary';
@@ -85,13 +89,40 @@ export class GraphService {
   }
 
   computeVisualEdges(visualGraph: VisualNode[], styleObj: edgeStyle): VisualEdge[] {
-    return this.getEdges(visualGraph).map(e => {
+    const edges = this.getEdges(visualGraph);
+    let doubleEdges: Edge[] = [];
+    edges.forEach(e => {
+      edges.forEach(f => {
+        if (e.end == f.start && e.start == f.end) {
+          doubleEdges.push(e);
+        }
+      })
+    })
+
+    return edges.map(e => {
       const startNode: VisualNode = visualGraph.find(x => x.id == e.start) ?? { id: '', edges: [] };
       const endNode: VisualNode = visualGraph.find(x => x.id == e.end) ?? { id: '', edges: [] };
+
+      if (styleObj.doubleEdgeOffset == undefined) {
+        throw new Error();
+      }
+
+      let path = 'M' + startNode?.midX + ' ' + startNode?.midY;
+      if (doubleEdges.includes(e) && doubleEdges.filter(x => x.start == e.end && x.end == e.start).length > 0) {
+        const p = this.findCurvePoint(this.getValue(startNode.midX), this.getValue(startNode.midY), this.getValue(endNode.midX), this.getValue(endNode.midY), styleObj.doubleEdgeOffset);
+        path += ' Q' + String(p.x) + ' ' + String(p.y) + ' ' + endNode?.midX + ' ' + endNode?.midY;
+        doubleEdges = doubleEdges.filter(x => x != e);
+      } else if (doubleEdges.includes(e) || doubleEdges.includes({ start: e.end, end: e.start })) {
+        const p = this.findCurvePoint(this.getValue(startNode.midX), this.getValue(startNode.midY), this.getValue(endNode.midX), this.getValue(endNode.midY), -styleObj.doubleEdgeOffset);
+        path += ' Q' + String(p.x) + ' ' + String(p.y) + ' ' + endNode?.midX + ' ' + endNode?.midY;
+      } else {
+        path += ' L' + endNode?.midX + ' ' + endNode?.midY;
+      }
+
       return {
         start: startNode,
         end: endNode,
-        path: 'M' + startNode?.midX + ' ' + startNode?.midY + ' L' + endNode?.midX + ' ' + endNode?.midY,
+        path: path,
         strokeColor: styleObj.strokeColor,
         strokeWidth: styleObj.strokeWidth
       }
@@ -172,5 +203,31 @@ export class GraphService {
       }
     }
     return workNodes;
+  }
+
+  findCurvePoint(Ax: number, Ay: number, Bx: number, By: number, distance: number) {
+    const midPointX = (Ax + Bx) / 2;
+    const midPointY = (Ay + By) / 2;
+
+    if (Ax == Bx) return { x: midPointX + distance, y:midPointY};
+    if (Ay == By) return { x: midPointX, y:midPointY + distance};
+
+    const slope = -1 * ((Bx - Ax) / (By - Ay));
+    const delta = distance / Math.sqrt(slope * slope + 1);
+    const yPerpendicular = midPointY + (slope >= 0 ? delta : - delta);
+    const xPerpendicular = midPointX + (yPerpendicular - midPointY) / slope;
+
+    return { x: Math.round(xPerpendicular), y: Math.round(yPerpendicular) };
+  }
+
+  sortByGroupThenDistance(groupA?:number, groupB?:number, distanceA?:number, distanceB?:number) {
+    if (groupA == undefined || groupB == undefined || distanceA == undefined || distanceB == undefined) {
+      throw new Error();
+    }
+    const primary = groupA - groupB;
+    if (primary == 0) {
+      return distanceA - distanceB;
+    }
+    return primary;
   }
 }
