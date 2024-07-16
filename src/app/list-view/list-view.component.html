@@ -1,47 +1,71 @@
-@for (node of nodes; track node.id) {
-<mat-card class="card" appearance="outlined">
-    <mat-card-header>
-        <mat-card-title>{{node.id}}</mat-card-title>
-        <mat-card-subtitle>Node</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <table>
-            <tr matTooltip="Shortest distance from the start node in the group" matTooltipPosition="above" matTooltipShowDelay="800">
-                <td> Distance </td>
-                <td> {{node.distance}} </td>
-            </tr>
-            <tr>
-                <td> Parent </td>
-                <td> {{node.parent}} </td>
-            </tr>
-            <tr>
-                <td> Group </td>
-                <td> {{node.group}} </td>
-            </tr>
-            <tr>
-                <td> Color </td>
-                <td> {{node.color}} </td>
-            </tr>
-            <tr>
-                <td> Outgoing </td>
-                <td> 
-                    @for (e of node.edges; track $index) {
-                        {{e}},
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td> Adjacent </td>
-                <td> 
-                    @for (e of node.edges; track $index) {
-                        {{e}},
-                    }
-                </td>
-            </tr>
-        </table>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-button>EDIT</button>
-    </mat-card-actions>
-</mat-card>
-}
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title> Nodes </mat-panel-title>
+            <!-- <mat-panel-description> This is a summary of the content </mat-panel-description> -->
+        </mat-expansion-panel-header>
+        @for (node of visualNodes; track node.id) {
+        <mat-card [id]="node.id" class="card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{node.id}}</mat-card-title>
+                <mat-card-subtitle>Node</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <table>
+                    <tr matTooltip="Shortest distance from the start node in the group" matTooltipPosition="above"
+                        matTooltipShowDelay="800">
+                        <td> Distance </td>
+                        <td> {{node.distance}} </td>
+                    </tr>
+                    <tr>
+                        <td> Parent </td>
+                        <td> {{node.parent}} </td>
+                    </tr>
+                    <tr>
+                        <td> Group </td>
+                        <td> {{node.group}} </td>
+                    </tr>
+                    <tr>
+                        <td> Color </td>
+                        <td> {{node.color}} </td>
+                    </tr>
+                    <tr>
+                        <td> Outgoing </td>
+                        <td>
+                            @for (e of node.edges; track $index) {
+                            {{e}},
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Adjacent </td>
+                        <td>
+                            @for (e of node.edges; track $index) {
+                            {{e}},
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button>EDIT</button>
+            </mat-card-actions>
+        </mat-card>
+        }
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title> Edges </mat-panel-title>
+            <!-- <mat-panel-description> This is a summary of the content </mat-panel-description> -->
+        </mat-expansion-panel-header>
+        <mat-list role="list">
+            @for (edge of visualEdges; track $index) {
+            <mat-list-item role="listitem">
+                <span class="fw-bold">{{edge.start.id}}</span>
+                -
+                <span class="fw-bold">{{edge.end.id}}</span>
+            </mat-list-item>
+            }
+        </mat-list>
+    </mat-expansion-panel>
+</mat-accordion>

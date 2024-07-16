@@ -1,0 +1,30 @@
+<form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+    <mat-accordion>
+        <div>
+            <mat-form-field appearance="outline" id="senderInput">
+                <mat-label>Sender</mat-label>
+                <mat-select formControlName="sender">
+                    <mat-option value="player">Player Response Option</mat-option>
+                    <mat-option value="contact">Conact One</mat-option>
+                    <mat-option value="system">System Message</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" id="waitInput">
+                <mat-label>Wait (ms)</mat-label>
+                <input matInput type="number" formControlName="wait">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" id="textInput">
+                <mat-label>Text</mat-label>
+                <input matInput type="text" formControlName="body">
+                <!-- <mat-hint>Hint</mat-hint> -->
+            </mat-form-field>
+            <button mat-icon-button id="submitButton" type="submit">
+                <span class="material-symbols-outlined">
+                    send
+                </span>
+            </button>
+        </div>
+    </mat-accordion>
+</form>

@@ -1,0 +1,41 @@
+<div class="card-list">
+    <mat-accordion>
+        @for ( message of messages; track $index) {
+        <mat-card [id]="message.id" class="message-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-subtitle>{{message.sender}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{message.body}}</p>
+            </mat-card-content>
+            <mat-card-footer class="card-footer">
+                <mat-chip-set>
+                    <mat-chip>{{message.id}}</mat-chip>
+                    <mat-chip>wait {{message.wait}} ms</mat-chip>
+                    @if (message.next != undefined) {
+                    <mat-chip>next up {{message.next}}</mat-chip>
+                    }
+                    @if (message.knowledge != undefined) {
+                    <mat-chip>{{message.knowledge}}</mat-chip>
+                    }
+                </mat-chip-set>
+            </mat-card-footer>
+        </mat-card>
+        @for (option of message.responseOptions; track $index) {
+            <div class="d-flex justify-content-center">
+                <mat-accordion>
+                    <button mat-fab extended>
+                        {{option.text}}
+                    </button>
+                    <span>
+                        {{option.id}}
+                    </span>
+                    <span>
+                        {{option.next}}
+                    </span>
+                </mat-accordion>
+            </div>
+        }
+        }
+    </mat-accordion>
+</div>

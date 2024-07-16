@@ -1,5 +1,6 @@
 export interface ResponseOption {
     id: string;
     text: string;
-    next: string;
+    next?: string;
+    requiredKnowledge?: string[]
 }

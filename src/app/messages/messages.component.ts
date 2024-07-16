@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { Message } from '../model/message.model';
+import { Message } from '../game/model/message.model';
 import { animate, query, stagger, state, style, transition, trigger } from '@angular/animations';
-import { ResponseOption } from '../model/response.model';
+import { ResponseOption } from '../game/model/response.model';
 
 @Component({
   selector: 'messages',
@@ -56,50 +56,34 @@ export class MessagesComponent {
   messages: Message[] = [];
 
   incomingMessages: Message[] = [
-    {
-      id: 'start', body: "Hello Word!", sender: "computer", next: '2', wait: 1000, showOptions: true, responseOptions: [
-        { id: 'r1', text: "HI!", next: '3' },
-        { id: 'r2', text: "Good morning, America!", next: '3' }
-      ]
-    },
-    { id: '3', body: "What a nice day!", sender: "computer", next: '4', wait: 2000, showOptions: false, responseOptions: [] },
-    { id: '4', body: "Hello Word!", sender: "computer", next: '5', wait: 2000, showOptions: false, responseOptions: [] },
-    { id: '5', body: "Hello Word!", sender: "computer", next: '6', wait: 3000, showOptions: false, responseOptions: [] },
-    { id: '6', body: "Hello Word!", sender: "computer", next: '11', wait: 50, showOptions: false, responseOptions: [] },
-    { id: '7', body: "Hello Word!", sender: "player", next: '2', wait: 10, showOptions: false, responseOptions: [] },
-    { id: '8', body: "Hello Word!", sender: "player", next: '2', wait: 10, showOptions: false, responseOptions: [] },
-    { id: '2', body: "Hello Word!", sender: "system", next: 'none', wait: 10, showOptions: false, responseOptions: [] },
-    { id: '10', body: "Hello Word!", sender: "player", next: '2', wait: 10, showOptions: false, responseOptions: [] },
-    {
-      id: '11', body: "Hello Word!", sender: "player", next: '2', wait: 1000, showOptions: true, responseOptions: [
-        { id: 'r3', text: "My first response", next: '2' },
-        { id: 'r4', text: "Good morning, America!", next: '2' }
-      ]
-    },
-    //{ id: '12', body: "Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!", sender: "player", next: '2', wait: 0, showOptions: false, responseOptions: [] },
-    //{ id: '13', body: "Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!Hello Word!", sender: "player", next: '2', wait: 0, showOptions: false, responseOptions: [] },
+      { id: '12', body: "Hello Word!", sender: "c", next: '13', wait: 0, showOptions: false, responseOptions: [] },
+      { id: '13', body: "Hello Word!", sender: "c", next: '2', wait: 1000, showOptions: false, responseOptions: [] },
   ]
 
   responses: ResponseOption[] = [];
 
   respond(id: string): void {
-    let resp: ResponseOption = this.responses.find(x => x.id == id) ?? { id: '1', text: "No no!!", next: '2' };
-    this.messages.push({ id: resp.id, body: resp.text, sender: "player", next: "0", wait: 0, showOptions: false, responseOptions: [] });
+    let resp: ResponseOption | undefined = this.responses.find(x => x.id == id);
+    if (resp == undefined || resp.next == undefined) throw new Error();
+    this.messages.push({
+      id:resp.id, body:resp.text, sender:"player", next:"0", showOptions:false, wait:0, responseOptions:[]
+    });
     this.toggleResponseBoxVisibility();
     this.reciveMessage(resp.next);
   }
 
   async reciveMessage(id:string) {
     let msg: Message | undefined = this.incomingMessages.find(x => x.id == id);
-    if (msg != undefined) {
-      await this.delay(msg.wait);
-      this.messages.push(msg);
-      if (msg.showOptions) {
-        this.responses = msg.responseOptions;
-        this.toggleResponseBoxVisibility();
-      } else {
-        this.reciveMessage(msg.next);
-      }
+    if (msg == undefined || msg.next == undefined) {
+      throw new Error();
+    }
+    await this.delay(msg.wait);
+    this.messages.push(msg);
+    if (msg.showOptions) {
+      this.responses = msg.responseOptions;
+      this.toggleResponseBoxVisibility();
+    } else {
+      this.reciveMessage(msg.next);
     }
   }
 

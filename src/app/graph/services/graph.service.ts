@@ -1,11 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { VisualNode } from '../models/visualNode.model';
 import { Node } from '../models/node.model';
 import { nodeStyle } from '../models/nodeStyle.model';
 import { edgeStyle } from '../models/edgeStyle.model';
 import { VisualEdge } from '../models/visualEdge.model';
 import { Edge } from '../models/edge.model';
-import { SlicePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
