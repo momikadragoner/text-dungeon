@@ -61,5 +61,6 @@ export class MessageFormComponent {
       };
       this.messageChange.emit(this.message);
     }
+    this.messageForm.patchValue({body: ''});
   }
 }

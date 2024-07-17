@@ -13,7 +13,9 @@ export class MessageService {
     const edges: string[] = [];
     if (msg.showOptions) {
       msg.responseOptions.forEach(r => {
-        edges.push(r.id);
+        if (r.next != undefined) {
+          edges.push(r.next);
+        }
       });
     } else {
       if (msg.next != undefined) {

@@ -4,6 +4,29 @@
     max-width: 80%;
 }
 
+.option-card {
+    margin-bottom: 1rem;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    min-width: 9rem;
+}
+
 .card-footer {
     padding: 1rem;
+}
+
+.padding {
+    height: 30vh;
+}
+
+.card-list {
+    margin-top: 1rem;
+}
+
+.card-text {
+    text-align: center;
+}
+
+.selected {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
