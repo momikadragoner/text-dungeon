@@ -49,16 +49,32 @@ export class MessagesComponent {
    *
    */
   constructor() {
-    this.reciveMessage('start');
+    this.reciveMessage('M-0');
   }
   responseBoxVisible = false;
 
   messages: Message[] = [];
 
   incomingMessages: Message[] = [
-      { id: '12', body: "Hello Word!", sender: "c", next: '13', wait: 0, showOptions: false, responseOptions: [] },
-      { id: '13', body: "Hello Word!", sender: "c", next: '2', wait: 1000, showOptions: false, responseOptions: [] },
-  ]
+    { id: 'M-0', body: "Hello Word!", sender: "conact", next: 'M-1', wait: 0, showOptions: false, responseOptions: [] },
+    {
+      id: 'M-1', body: "It's a beautiful day today!!", sender: "contact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
+        { id: 'O0-1', next: 'M-2', text: "Good Morning!" },
+        { id: 'O1-1', next: 'M-3', text: "It sure is!" }
+      ]
+    },
+    {
+      id: 'M-2', body: "To you too!", sender: "conact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
+        { id: 'O0-2', next: 'M-4', text: "Have you heard the news" },
+        { id: 'O1-2', next: undefined, text: "What if..." }
+      ]
+    },
+    { id: 'M-3', body: "I just love basking in the sun!", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-4', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-5', wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-5', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-6', wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-6', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-7', wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-7', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
+  ];
 
   responses: ResponseOption[] = [];
 
@@ -74,7 +90,7 @@ export class MessagesComponent {
 
   async reciveMessage(id:string) {
     let msg: Message | undefined = this.incomingMessages.find(x => x.id == id);
-    if (msg == undefined || msg.next == undefined) {
+    if (msg == undefined) {
       throw new Error();
     }
     await this.delay(msg.wait);
@@ -83,7 +99,7 @@ export class MessagesComponent {
       this.responses = msg.responseOptions;
       this.toggleResponseBoxVisibility();
     } else {
-      this.reciveMessage(msg.next);
+      if (msg.next != null) this.reciveMessage(msg.next);
     }
   }
 

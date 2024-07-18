@@ -16,7 +16,7 @@
     <mat-drawer-content>
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100">
             <mat-tab label="Write" bodyClass="w-100 h-100 height">
-                <message-list-view (pathChange)="onPathChange($event)" [messages]="messagePath"></message-list-view>
+                <message-list-view (pathChange)="onPathChange($event)" [messages]="messagePath" class="reverse"></message-list-view>
                 <div class="bottom d-flex justify-content-center">
                     <div class="form shadow">
                         <message-form (messageChange)="addMessage($event)" (newResponseOption)="addOption($event)"></message-form>

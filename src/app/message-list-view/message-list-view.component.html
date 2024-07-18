@@ -1,54 +1,61 @@
-<div class="card-list">
-    <form [formGroup]="choiceForm">
-        <div formArrayName="choices">
-
-            <mat-accordion>
-                @for ( message of messages; track $index) {
-                <mat-card [id]="message.id" class="message-card" appearance="outlined">
-                    <mat-card-header class="d-flex justify-content-between">
-                        <mat-card-subtitle>{{message.sender}}</mat-card-subtitle>
-                        <mat-chip>{{message.id}}</mat-chip>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <p>{{message.body}}</p>
-                    </mat-card-content>
-                    <mat-card-footer class="card-footer">
-                        <mat-chip-set>
-                            @if (message.wait > 0) {
-                            <mat-chip>{{message.wait}} ms</mat-chip>
-                            }
-                            @if (message.knowledge != undefined) {
-                            <mat-chip>{{message.knowledge}}</mat-chip>
-                            }
-                        </mat-chip-set>
-                    </mat-card-footer>
-                </mat-card>
-                @if (message.showOptions) {
-                <mat-radio-group (change)="onChange()" [formControlName]="getRadioIndex($index)">
-                    <div class="d-flex justify-content-center">
-                        @for (option of message.responseOptions; track option.id) {
-                        <mat-card [id]="option.id" class="option-card" appearance="outlined">
-                            <mat-card-header class="d-flex justify-content-center">
-                                <mat-radio-button [value]="option.id"></mat-radio-button>
+<div class="reverse">
+    <div class="card-list ">
+        <form [formGroup]="choiceForm">
+            <div formArrayName="choices">
+                <mat-accordion>
+                    @for ( message of messages; track $index) {
+                    <div @arrivingMessages>
+                        <mat-card [id]="message.id" class="arrive message-card" appearance="outlined">
+                            <mat-card-header class="d-flex justify-content-between">
+                                <mat-card-subtitle>{{message.sender}}</mat-card-subtitle>
+                                <mat-chip>{{message.id}}</mat-chip>
                             </mat-card-header>
                             <mat-card-content>
-                                <p class="card-text">{{option.text}}</p>
+                                <p>{{message.body}}</p>
                             </mat-card-content>
                             <mat-card-footer class="card-footer">
                                 <mat-chip-set>
-                                    @if (option.requiredKnowledge != undefined) {
-                                    <mat-chip>{{option.requiredKnowledge}}</mat-chip>
+                                    @if (message.wait > 0) {
+                                    <mat-chip>{{message.wait}} ms</mat-chip>
+                                    }
+                                    @if (message.knowledge != undefined) {
+                                    <mat-chip>{{message.knowledge}}</mat-chip>
                                     }
                                 </mat-chip-set>
                             </mat-card-footer>
                         </mat-card>
-                        }
                     </div>
-                </mat-radio-group>
-                }
-                }
-            </mat-accordion>
-        </div>
-    </form>
-    <div class="padding"></div>
+                    @if (message.showOptions) {
+                    <mat-radio-group (change)="onChange()" [formControlName]="getRadioIndex($index)">
+                        <div class="d-flex justify-content-center">
+                            @for (option of message.responseOptions; track option.id) {
+                            <div @arrivingMessages>
+                                <mat-card [id]="option.id"
+                                    class="option-card arrive {{choiceForm.value.choices?.includes(option.id) ? 'selected' : ''}}"
+                                    appearance="outlined">
+                                    <mat-card-header class="d-flex justify-content-center">
+                                        <mat-radio-button [value]="option.id"></mat-radio-button>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <p class="card-text">{{option.text}}</p>
+                                    </mat-card-content>
+                                    <mat-card-footer class="card-footer">
+                                        <mat-chip-set>
+                                            @if (option.requiredKnowledge != undefined) {
+                                            <mat-chip>{{option.requiredKnowledge}}</mat-chip>
+                                            }
+                                        </mat-chip-set>
+                                    </mat-card-footer>
+                                </mat-card>
+                            </div>
+                            }
+                        </div>
+                    </mat-radio-group>
+                    }
+                    }
+                </mat-accordion>
+            </div>
+        </form>
+        <div class="padding"></div>
+    </div>
 </div>

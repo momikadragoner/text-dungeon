@@ -17,6 +17,7 @@ import { MessageFormComponent } from "../message-form/message-form.component";
 import { MessageListViewComponent } from "../message-list-view/message-list-view.component";
 import { ResponseOption } from '../game/model/response.model';
 import { MessageService } from '../game/services/message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-editor-page',
@@ -60,11 +61,13 @@ export class EditorPageComponent implements OnInit {
     },
     {
       id: 'M-2', body: "To you too!", sender: "conact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
-        { id: 'O0-2', next: undefined, text: "Have you heard the news" },
+        { id: 'O0-2', next: 'M-4', text: "Have you heard the news" },
         { id: 'O1-2', next: undefined, text: "What if..." }
       ]
     },
     { id: 'M-3', body: "I just love basking in the sun!", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-4', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-5', wait: 1000, showOptions: false, responseOptions: [] },
+    { id: 'M-5', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
   ];
   messagePath: Message[] = [];
   selectedResponseOptions: string[] = [];
@@ -81,7 +84,8 @@ export class EditorPageComponent implements OnInit {
 
   constructor(
     private graphService: GraphService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -116,15 +120,20 @@ export class EditorPageComponent implements OnInit {
       }
     }
     this.messageTree.push(e);
-    this.messagePath = this.takeMessagePath(this.messageTree, this.selectedResponseOptions);
+    this.messagePath.push(e);
   }
 
   addOption(e: ResponseOption) {
     if (this.messagePath.length > 0) {
-      const last = this.messagePath[this.messagePath.length - 1];
-      last.showOptions = true;
-      e.id = 'O' + last.responseOptions.length + '-' + last.id.split('-')[1]
-      last.responseOptions.push(e);
+      const lastTree = this.messagePath[this.messagePath.length - 1];
+      const last = this.messageTree.find(x => x.id == lastTree.id);
+      if (last != undefined) {
+        last.showOptions = true;
+        lastTree.showOptions = true;
+        e.id = 'O' + last.responseOptions.length + '-' + last.id.split('-')[1]
+        last.responseOptions.push(e);
+        lastTree.responseOptions.push(e);
+      }
     }
   }
 
@@ -148,7 +157,7 @@ export class EditorPageComponent implements OnInit {
         orderedMessagePath.push(node);
         next = node.next;
         if (node.showOptions && choices != undefined) {
-          const option = node.responseOptions.find(m => m.id == choices[index]);
+          const option = node.responseOptions.find(m => m.id == choices[index]) ?? node.responseOptions[0];
           next = option?.next;
           index++;
         }
@@ -173,5 +182,6 @@ export class EditorPageComponent implements OnInit {
       this.selectedResponseOptions.push(x);
     });
     this.messagePath = this.takeMessagePath(this.messageTree, e);
+    console.log(e);
   }
 }
