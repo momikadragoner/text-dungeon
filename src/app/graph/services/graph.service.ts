@@ -47,6 +47,7 @@ export class GraphService {
     console.log({sorted: nodes});
     
     nodes.forEach(w => {
+      w.adjacent = this.getAdjacentNodes(graph, w.id);
       if (w.distance != undefined && w.group != undefined) {
 
         // set position based on bft distance
@@ -73,7 +74,7 @@ export class GraphService {
 
         workNodes.push({
           id: w.id, edges: w.edges, distance: w.distance, color: w.color, parent: w.parent, group: w.group,
-          height: styleObj.height, width: styleObj.width, classList: classes,
+          height: styleObj.height, width: styleObj.width, classList: classes, adjacent: w.adjacent,
           x: String(x) + unit,
           y: String(y) + unit,
           midX: String(x + (width / 2)),

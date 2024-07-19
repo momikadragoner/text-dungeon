@@ -12,4 +12,5 @@ export interface VisualNode extends Node {
     midX?:string;
     midY?:string;
     classList?:string;
+    adjacent?:string[];
 }
