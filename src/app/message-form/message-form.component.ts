@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,9 +24,8 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class MessageFormComponent {
   messageForm = new FormGroup({
-    body: new FormControl(''),
-    sender: new FormControl(''),
-    next: new FormControl(''),
+    body: new FormControl('', Validators.required,),
+    sender: new FormControl('', Validators.required),
     wait: new FormControl(0),
   })
 
@@ -62,5 +61,14 @@ export class MessageFormComponent {
       this.messageChange.emit(this.message);
     }
     this.messageForm.patchValue({body: ''});
+  }
+
+  onSenderChange(e:any) {
+    if (e == 'player') {
+      this.messageForm.get("wait")?.disable();
+    }
+    else {
+      this.messageForm.get("wait")?.enable();
+    }
   }
 }

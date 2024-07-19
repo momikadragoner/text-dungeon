@@ -1,4 +1,7 @@
 <div class="reverse">
+    <div class="d-flex justify-content-center">
+        <div class="branch"></div>
+    </div>
     <div class="card-list ">
         <form [formGroup]="choiceForm">
             <div formArrayName="choices">
@@ -27,7 +30,7 @@
                     </div>
                     @if (message.showOptions) {
                     <mat-radio-group (change)="onChange()" [formControlName]="getRadioIndex($index)">
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center options-container">
                             @for (option of message.responseOptions; track option.id) {
                             <div @arrivingMessages>
                                 <mat-card [id]="option.id"

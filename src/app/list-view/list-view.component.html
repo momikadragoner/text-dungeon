@@ -33,7 +33,7 @@
                         <td> Outgoing </td>
                         <td>
                             @for (e of node.edges; track $index) {
-                            {{e}},
+                            {{e + ((node.edges.length - 1) == $index ? '': ', ') }}
                             }
                         </td>
                     </tr>
@@ -47,9 +47,6 @@
                     </tr>
                 </table>
             </mat-card-content>
-            <mat-card-actions>
-                <button mat-button>EDIT</button>
-            </mat-card-actions>
         </mat-card>
         }
     </mat-expansion-panel>

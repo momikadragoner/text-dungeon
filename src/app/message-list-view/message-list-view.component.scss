@@ -9,6 +9,7 @@
     margin-left: .5rem;
     margin-right: .5rem;
     min-width: 9rem;
+    transition: all .5s;
 }
 
 .card-footer {
@@ -37,4 +38,20 @@
     flex-direction: column-reverse;
     scroll-behavior: smooth;
     height: 100%;
+}
+
+.branch {
+    position: absolute;
+    top: 0;
+    border-left: 1px black solid;
+    height: 100%;
+    z-index: -1;
+}
+
+.options-container {
+    background: linear-gradient(0deg, rgba(#eee, 0) 0%, #eee 20%, #eee 80%, rgba(#eee, 0) 100%);
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    margin-top: -2rem;
+    margin-bottom: -2rem;
 }
