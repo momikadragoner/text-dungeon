@@ -1,23 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { GraphVisualComponent } from '../graph-visual/graph-visual.component';
+import { GraphVisualComponent } from '../../graph-visual/graph-visual.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ListViewComponent } from "../list-view/list-view.component";
-import { Node } from '../graph/models/node.model';
+import { ListViewComponent } from "../../list-view/list-view.component";
+import { Node } from '../../graph/models/node.model';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatTabsModule } from '@angular/material/tabs';
-import { GraphService } from '../graph/services/graph.service';
-import { nodeStyle } from '../graph/models/nodeStyle.model';
-import { edgeStyle } from '../graph/models/edgeStyle.model';
-import { VisualNode } from '../graph/models/visualNode.model';
-import { VisualEdge } from '../graph/models/visualEdge.model';
-import { Message } from '../game/model/message.model';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { GraphService } from '../../graph/services/graph.service';
+import { nodeStyle } from '../../graph/models/nodeStyle.model';
+import { edgeStyle } from '../../graph/models/edgeStyle.model';
+import { VisualNode } from '../../graph/models/visualNode.model';
+import { VisualEdge } from '../../graph/models/visualEdge.model';
+import { Message } from '../../game/model/message.model';
 import { MessageFormComponent } from "../message-form/message-form.component";
 import { MessageListViewComponent } from "../message-list-view/message-list-view.component";
-import { ResponseOption } from '../game/model/response.model';
-import { MessageService } from '../game/services/message.service';
-import { Router } from '@angular/router';
+import { ResponseOption } from '../../game/model/response.model';
+import { MessageService } from '../../game/services/message.service';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { NewLoopDialogComponent } from '../dialog/new-loop-dialog/new-loop-dialog.component';
 
 @Component({
   selector: 'app-editor-page',
@@ -62,7 +69,7 @@ export class EditorPageComponent implements OnInit {
     {
       id: 'M-2', body: "To you too!", sender: "conact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
         { id: 'O0-2', next: 'M-4', text: "Have you heard the news" },
-        { id: 'O1-2', next: undefined, text: "What if..." }
+        { id: 'O1-2', next: 'M-1', text: "What if..." }
       ]
     },
     { id: 'M-3', body: "I just love basking in the sun!", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
@@ -85,7 +92,7 @@ export class EditorPageComponent implements OnInit {
   constructor(
     private graphService: GraphService,
     private messageService: MessageService,
-    private router: Router
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -152,6 +159,17 @@ export class EditorPageComponent implements OnInit {
     }
     orderedMessagePath.push(node);
     while (next != undefined) {
+      const loopNode = orderedMessagePath.find(x => x.id == next);
+      if (loopNode != undefined) {
+        const last = orderedMessagePath[orderedMessagePath.length - 1];
+        if (last.showOptions) {
+          const option = last.responseOptions.find(m => m.id == choices[index - 1]) ?? last.responseOptions[0];
+          option.isLoop = true;
+        } else {
+          last.isLoop = true;
+        }
+        return orderedMessagePath;
+      }
       node = messageTree.find(x => x.id == next);
       if (node != undefined) {
         orderedMessagePath.push(node);
@@ -182,6 +200,34 @@ export class EditorPageComponent implements OnInit {
       this.selectedResponseOptions.push(x);
     });
     this.messagePath = this.takeMessagePath(this.messageTree, e);
-    console.log(e);
+  }
+
+  onSelectedTabChange(e: MatTabChangeEvent) {
+    if (e.index == 1) {
+      this.graph = this.messageService.gameTreeToGraph(this.messageTree);
+      this.visualNodes = this.graphService.computeVisualNodes(this.graph, this.nodeStyle);
+      this.visualEdges = this.graphService.computeVisualEdges(this.visualNodes, this.edgeStyle);
+    }
+  }
+
+  openDialog(startMessage?: Message) {
+    const startNode = startMessage ?? this.messagePath[this.messagePath.length - 1]
+    let dialogRef = this.dialog.open(NewLoopDialogComponent, {
+      data: {
+        node: startNode,
+        tree: this.messageTree
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.addLoop(startNode, result);
+      }
+    });
+  }
+
+  addLoop(startNode: Message, endNodeId: string) {
+    startNode.next = endNodeId;
+    this.messagePath = this.takeMessagePath(this.messageTree, this.selectedResponseOptions);
   }
 }

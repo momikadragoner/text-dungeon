@@ -11,21 +11,55 @@
                         <mat-card [id]="message.id" class="arrive message-card" appearance="outlined">
                             <mat-card-header class="d-flex justify-content-between">
                                 <mat-card-subtitle>{{message.sender}}</mat-card-subtitle>
-                                <mat-chip>{{message.id}}</mat-chip>
+                                <button mat-icon-button class="btn-more" [matMenuTriggerFor]="cardMoreMenu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #cardMoreMenu="matMenu">
+                                    <button mat-menu-item [matMenuTriggerFor]="flags">
+                                        <mat-icon>flag</mat-icon>
+                                        <span>Flag</span>
+                                    </button>
+                                    <button mat-menu-item (click)="openDialog(message)">
+                                        <mat-icon>loop</mat-icon>
+                                        <span>Loop to</span>
+                                    </button>
+                                </mat-menu>
+                                <mat-menu #flags="matMenu">
+                                    @for (color of colors; track $index) {
+                                    <button mat-menu-item (click)="onFlag(message.id, color)">
+                                        <span>{{color}}</span>
+                                    </button>
+                                    }
+                                </mat-menu>
                             </mat-card-header>
                             <mat-card-content>
                                 <p>{{message.body}}</p>
                             </mat-card-content>
                             <mat-card-footer class="card-footer">
-                                <mat-chip-set>
+                                <mat-chip-set in>
+                                    <mat-chip>{{message.id}}</mat-chip>
                                     @if (message.wait > 0) {
                                     <mat-chip>{{message.wait}} ms</mat-chip>
+                                    }
+                                    @if (message.isLoop) {
+                                    <mat-chip routerLink="./" [fragment]="message.next">
+                                        Loop to {{message.next}}
+                                    </mat-chip>
                                     }
                                     @if (message.knowledge != undefined) {
                                     <mat-chip>{{message.knowledge}}</mat-chip>
                                     }
+                                    @for (flag of message.flags; track $index) {
+                                    <mat-chip class="flag-chip">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="circle" [style.backgroundColor]="flag"></div>
+                                            <div>{{flag}}</div>
+                                        </div>
+                                    </mat-chip>
+                                    }
                                 </mat-chip-set>
                             </mat-card-footer>
+
                         </mat-card>
                     </div>
                     @if (message.showOptions) {
@@ -46,6 +80,11 @@
                                         <mat-chip-set>
                                             @if (option.requiredKnowledge != undefined) {
                                             <mat-chip>{{option.requiredKnowledge}}</mat-chip>
+                                            }
+                                            @if (option.isLoop) {
+                                            <mat-chip routerLink="./" [fragment]="option.next">
+                                                Loops to {{option.next}}
+                                            </mat-chip>
                                             }
                                         </mat-chip-set>
                                     </mat-card-footer>

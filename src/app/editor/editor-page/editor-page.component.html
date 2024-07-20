@@ -1,0 +1,46 @@
+<mat-drawer-container class="main">
+    <mat-drawer mode="side" position="end" [opened]="isDrawerOpen">
+        <mat-toolbar>
+            <button (click)="isDrawerOpen = false" mat-icon-button>
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </button>
+            <span class="title">Overview</span>
+        </mat-toolbar>
+        <div class="container">
+            <h2 class="heading">Graph</h2>
+            <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100" (selectedTabChange)="onSelectedTabChange($event)">
+            <mat-tab label="Write" bodyClass="w-100 h-100 height">
+                <message-list-view (pathChange)="onPathChange($event)" [(messages)]="messagePath" (openNewLoopDialogEvent)="openDialog($event)"
+                    class="reverse"></message-list-view>
+                <div class="bottom d-flex justify-content-center">
+                    <div>
+                        <button class="row-button" mat-raised-button>
+                            <span class="material-symbols-outlined">
+                                person_add
+                            </span>
+                        </button>
+                        <button (click)="openDialog()" class="row-button" mat-raised-button>
+                            <span class="material-symbols-outlined btn-symbol">
+                                laps
+                            </span>
+                        </button>
+                        <div class="form shadow">
+                            <message-form (messageChange)="addMessage($event)"
+                                (newResponseOption)="addOption($event)"></message-form>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Graph">
+                <graph-visual class="height" [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
+            </mat-tab>
+            <mat-tab label="Preview">Content 3</mat-tab>
+        </mat-tab-group>
+    </mat-drawer-content>
+</mat-drawer-container>

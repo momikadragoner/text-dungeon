@@ -27,7 +27,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     PhoneScreenComponent,
     RouterOutlet,
     RouterLink
-]
+  ]
 })
 export class NavBarComponent {
   private breakpointObserver = inject(BreakpointObserver);

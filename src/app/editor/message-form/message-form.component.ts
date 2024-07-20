@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Message } from '../game/model/message.model';
-import { ResponseOption } from '../game/model/response.model';
+import { Message } from '../../game/model/message.model';
+import { ResponseOption } from '../../game/model/response.model';
 import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
@@ -35,6 +35,7 @@ export class MessageFormComponent {
   @Output() newResponseOption = new EventEmitter<ResponseOption>();
 
   onSubmit() {
+    if(!this.messageForm.valid) return;
     const formValue = this.messageForm.value;
     if (formValue.sender == undefined || formValue.body == undefined || formValue.wait == undefined) {
       throw new Error();

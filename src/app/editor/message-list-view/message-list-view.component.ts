@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Message } from '../game/model/message.model';
+import { Message } from '../../game/model/message.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAccordion } from '@angular/material/expansion';
@@ -8,6 +8,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 @Component({
   selector: 'message-list-view',
@@ -18,7 +22,10 @@ import { animate, query, stagger, style, transition, trigger } from '@angular/an
     MatAccordion,
     MatButtonModule,
     MatRadioModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink,
+    MatIconModule,
+    MatMenuModule
   ],
   templateUrl: './message-list-view.component.html',
   styleUrl: './message-list-view.component.scss',
@@ -48,8 +55,12 @@ import { animate, query, stagger, style, transition, trigger } from '@angular/an
 export class MessageListViewComponent implements OnChanges {
   @Input() messages: Message[] = [];
   @Output() pathChange = new EventEmitter<any>();
+  @Output() messagesChange = new EventEmitter<Message[]>();
+  @Output() openNewLoopDialogEvent= new EventEmitter<Message>();
 
-  constructor(private formBuilder: FormBuilder) { }
+  colors:string[] = ['Red', 'Yellow', 'Green', 'Blue'];
+
+  constructor(private formBuilder: FormBuilder, private router: Router) { }
   ngOnChanges(changes: SimpleChanges): void {
     let index = 0;
     const msgChange = changes['messages'];
@@ -98,5 +109,24 @@ export class MessageListViewComponent implements OnChanges {
 
   getRadioIndex(index: number) {
     return this.messages.filter(m => m.showOptions == true && this.messages.indexOf(m) <= index).length - 1;
+  }
+
+  onFlag(id:string, color:string) {
+    const msg = this.messages.find(x => x.id == id);
+    if (msg != undefined) {
+      if (msg.flags == undefined) {
+        msg.flags = [];
+      }
+      if (msg.flags.includes(color)) {
+        msg.flags = msg.flags.filter(x => x != color); 
+      } else {
+        msg.flags.push(color);
+      }
+    }
+    this.messagesChange.emit(this.messages);
+  }
+
+  openDialog(message:Message) {
+    this.openNewLoopDialogEvent.emit(message);
   }
 }

@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Create loop from {{ data.node.id }}</h2>
+<mat-dialog-content>
+  Which message node would you like to loop to?
+  <mat-selection-list #messages [multiple]="false">
+    @for (message of tree; track $index) {
+      <mat-list-option [value]="message.id">{{message.id}}
+        @for (flag of message.flags; track $index) {
+            <mat-chip class="flag-chip">
+                <div class="d-flex justify-content-center">
+                    <div class="circle" [style.backgroundColor]="flag"></div>
+                    <div>{{flag}}</div>
+                </div>
+            </mat-chip>
+            }
+      </mat-list-option>
+    }
+  </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="onCancelClick()">Cancel</button>
+  <button mat-button mat-dialog-close (click)="closeDialog()">Add</button>
+</mat-dialog-actions>

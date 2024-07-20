@@ -9,5 +9,7 @@ export interface Message {
     wait: number;
     showOptions: boolean;
     responseOptions: ResponseOption[];
+    isLoop?: boolean;
     knowledge?:string;
+    flags?:string[];
 }

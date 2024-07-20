@@ -17,7 +17,7 @@
 }
 
 .padding {
-    height: 30vh;
+    height: 35vh;
 }
 
 .card-list {
@@ -54,4 +54,17 @@
     padding-bottom: 4rem;
     margin-top: -2rem;
     margin-bottom: -2rem;
+}
+
+.btn-more {
+    margin-top: -.5rem;
+    margin-right: -.5rem;
+}
+
+.circle {
+    height: 1rem;
+    width: 1rem;
+    border-radius: .5rem;
+    margin-right: .2rem;
+    margin-top: .1rem;
 }
