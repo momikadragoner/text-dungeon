@@ -25,6 +25,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { NewLoopDialogComponent } from '../dialog/new-loop-dialog/new-loop-dialog.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-editor-page',
@@ -39,6 +40,9 @@ import { NewLoopDialogComponent } from '../dialog/new-loop-dialog/new-loop-dialo
     ListViewComponent,
     MessageFormComponent,
     MessageListViewComponent
+  ],
+  providers: [
+    CookieService
   ],
   templateUrl: './editor-page.component.html',
   styleUrl: './editor-page.component.scss'
@@ -92,10 +96,12 @@ export class EditorPageComponent implements OnInit {
   constructor(
     private graphService: GraphService,
     private messageService: MessageService,
+    private cookieService: CookieService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
+    this.loadFromCookie();
     this.selectedResponseOptions = this.defaultChoices(this.messageTree);
     this.messagePath = this.takeMessagePath(this.messageTree, this.selectedResponseOptions);
     this.graph = this.messageService.gameTreeToGraph(this.messageTree);
@@ -128,6 +134,7 @@ export class EditorPageComponent implements OnInit {
     }
     this.messageTree.push(e);
     this.messagePath.push(e);
+    this.saveToCookie();
   }
 
   addOption(e: ResponseOption) {
@@ -142,6 +149,7 @@ export class EditorPageComponent implements OnInit {
         lastTree.responseOptions.push(e);
       }
     }
+    this.saveToCookie();
   }
 
   takeMessagePath(messageTree: Message[], choices: string[]): Message[] {
@@ -229,5 +237,20 @@ export class EditorPageComponent implements OnInit {
   addLoop(startNode: Message, endNodeId: string) {
     startNode.next = endNodeId;
     this.messagePath = this.takeMessagePath(this.messageTree, this.selectedResponseOptions);
+    this.saveToCookie();
+  }
+
+  saveToCookie() {
+    this.cookieService.set('MessageTree', JSON.stringify(this.messageTree));
+  }
+
+  loadFromCookie(): boolean {
+    let cookieValue = this.cookieService.get('MessageTree');
+    try {
+      this.messageTree = (JSON.parse(cookieValue));
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

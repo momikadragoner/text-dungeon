@@ -13,12 +13,16 @@ export class GraphService {
 
   constructor() { }
 
-  computeVisualNodes(graph: Node[], styleObj: nodeStyle, startNode: string = 'start'): VisualNode[] {
+  computeVisualNodes(graph: Node[], styleObj: nodeStyle, startNode?: string): VisualNode[] {
     const unit = this.getUnit(styleObj.margin);
     const margin = this.getValue(styleObj.margin);
     const height = this.getValue(styleObj.height);
     const width = this.getValue(styleObj.width);
     const workNodes: VisualNode[] = [];
+
+    if (startNode == undefined) {
+      startNode = graph[graph.length - 1].id;
+    }
 
     // run bfs and separate into groups
     let group = 1;

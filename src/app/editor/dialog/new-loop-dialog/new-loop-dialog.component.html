@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>Create loop from {{ data.node.id }}</h2>
+<h2 mat-dialog-title>Create link from {{ data.node.id }}</h2>
 <mat-dialog-content>
-  Which message node would you like to loop to?
+  Which message node would you like to link to?
   <mat-selection-list #messages [multiple]="false">
     @for (message of tree; track $index) {
       <mat-list-option [value]="message.id">{{message.id}}
