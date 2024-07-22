@@ -1,5 +1,5 @@
 <div class="background">
-    <div class="screen shadow">
+    <div class="screen">
         <section class="sys-bar">
             <span class="system-text">
                 {{time | date : "HH:mm"}}
@@ -16,6 +16,6 @@
                 </span>
             </span>
         </section>
-        <messages></messages>
+        <router-outlet></router-outlet>
     </div>
 </div>

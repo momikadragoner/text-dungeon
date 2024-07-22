@@ -26,6 +26,9 @@ import {
 } from '@angular/material/dialog';
 import { NewLoopDialogComponent } from '../dialog/new-loop-dialog/new-loop-dialog.component';
 import { CookieService } from 'ngx-cookie-service';
+import { PhoneScreenComponent } from "../../phone-screen/phone-screen.component";
+import { MatIconModule } from '@angular/material/icon';
+import { MessagesComponent } from "../../messages/messages.component";
 
 @Component({
   selector: 'app-editor-page',
@@ -39,8 +42,11 @@ import { CookieService } from 'ngx-cookie-service';
     GraphVisualComponent,
     ListViewComponent,
     MessageFormComponent,
-    MessageListViewComponent
-  ],
+    MessageListViewComponent,
+    PhoneScreenComponent,
+    MatIconModule,
+    MessagesComponent
+],
   providers: [
     CookieService
   ],

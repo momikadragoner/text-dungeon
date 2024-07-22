@@ -8,6 +8,9 @@ $sys-bg: white;
 
 .header {
     border-bottom: .01rem $black solid;
+    margin: 0;
+    padding: 0;
+    background-color: white;
     // position: absolute;
     // left: 0;
     // right: 0;
@@ -16,7 +19,7 @@ $sys-bg: white;
 
 .contact {
     font-size: 1.1rem;
-    padding: 0;
+    padding-bottom: .2rem;
     margin: 0;
     font-weight: bold;
 }
@@ -46,6 +49,8 @@ $sys-bg: white;
     padding-right: .3rem;
     margin-right: 0;
     padding-bottom: 2rem;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .message {
@@ -75,11 +80,11 @@ $sys-bg: white;
 }
 
 .response-box {
-    height: 20vh;
+    height: 20%;
     // margin-bottom: 2rem;
     padding-top: 2rem;
-    border-bottom-left-radius: 2.5rem;
-    border-bottom-right-radius: 2.5rem;
+    border-bottom-left-radius: 3rem;
+    border-bottom-right-radius: 3rem;
     background: linear-gradient(0deg, $sys-bg 85%, rgba($sys-bg, 0) 100%);
 }
 
@@ -91,8 +96,8 @@ $sys-bg: white;
     left: 0;
     bottom: 0;
     background: linear-gradient(0deg, $sys-bg 6%, rgba($sys-bg, 0) 13%);
-    border-bottom-left-radius: 2.5rem;
-    border-bottom-right-radius: 2.5rem;
+    border-bottom-left-radius: 3rem;
+    border-bottom-right-radius: 3rem;
     pointer-events: none;
 }
 
@@ -103,6 +108,10 @@ $sys-bg: white;
 
 .padding {
     height: 20vh;
+}
+
+.padding-top {
+    height: 1rem;
 }
 
 .w-100 {
@@ -122,6 +131,7 @@ $sys-bg: white;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1rem;
 }
 
 .system {

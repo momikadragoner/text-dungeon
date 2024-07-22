@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { MessagesComponent } from "../messages/messages.component";
 import { DatePipe } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-phone-screen',
+  selector: 'phone-screen',
   standalone: true,
-  imports: [MessagesComponent, DatePipe],
+  imports: [MessagesComponent, DatePipe, RouterOutlet],
   templateUrl: './phone-screen.component.html',
   styleUrl: './phone-screen.component.scss'
 })

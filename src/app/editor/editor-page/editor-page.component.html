@@ -21,14 +21,16 @@
                 <div class="bottom d-flex justify-content-center">
                     <div>
                         <button class="row-button" mat-raised-button>
-                            <span class="material-symbols-outlined">
+                            <mat-icon>
                                 person_add
-                            </span>
+                            </mat-icon>
+                            New Contact
                         </button>
                         <button (click)="openDialog()" class="row-button" mat-raised-button>
-                            <span class="material-symbols-outlined btn-symbol">
-                                laps
-                            </span>
+                            <mat-icon>
+                                link
+                            </mat-icon>
+                            Link Back
                         </button>
                         <div class="form shadow">
                             <message-form (messageChange)="addMessage($event)"
@@ -40,7 +42,11 @@
             <mat-tab label="Graph">
                 <graph-visual class="height" [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
             </mat-tab>
-            <mat-tab label="Preview">Content 3</mat-tab>
+            <mat-tab label="Preview">
+                <phone-screen>
+                    <messages></messages>
+                </phone-screen>
+            </mat-tab>
         </mat-tab-group>
     </mat-drawer-content>
 </mat-drawer-container>

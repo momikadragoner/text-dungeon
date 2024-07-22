@@ -4,11 +4,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { Message } from '../game/model/message.model';
 import { animate, query, stagger, state, style, transition, trigger } from '@angular/animations';
 import { ResponseOption } from '../game/model/response.model';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'messages',
   standalone: true,
-  imports: [MatFabButton, MatGridListModule],
+  imports: [MatFabButton, MatGridListModule, MatAccordion ],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.scss',
   animations: [

@@ -1,8 +1,11 @@
-<div class="header frosted-glass d-flex justify-content-center">
-    <h3 class="fw-bold contact">Contact</h3>
+<div class="">
+    <div class="header d-flex justify-content-center">
+        <span class="fw-bold contact">Contact</span>
+    </div>
 </div>
 <div class="scroll container reverse">
     <div>
+        <div class="padding-top"></div>
         @for (message of messages; track message.id) {
             <div @arrivingMessages class="d-flex {{messageJustify(message.sender)}}">
                 <div class="message {{messageStyle(message.id)}}">{{ message.body }}</div>
@@ -16,13 +19,11 @@
 <div class="inside"></div>
 @if (responseBoxVisible) {
     <div @changeResponseBoxVisibility class="response-box bottom w-100 s">
-        <mat-grid-list cols="1" rowHeight="5:1">
+        <mat-accordion>
             @for (response of responses; track response.id) {
-                <mat-grid-tile>
                     <button (click)="respond(response.id)" class="response-button w-90" mat-fab extended>{{response.text}}</button>
-                </mat-grid-tile>
             }
-        </mat-grid-list>
+        </mat-accordion>
     </div>
 }
 <!-- <div class="bottom" style="display: flex; justify-content: center;">
@@ -32,4 +33,4 @@
               Sorry, your browser does not support inline SVG.
         </svg>
     </div>
-</div> -->
+</div> --> 
