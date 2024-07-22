@@ -5,7 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { Router, RouterLink, RouterModule } from '@angular/router';
@@ -56,11 +56,24 @@ export class MessageListViewComponent implements OnChanges {
   @Input() messages: Message[] = [];
   @Output() pathChange = new EventEmitter<any>();
   @Output() messagesChange = new EventEmitter<Message[]>();
-  @Output() openNewLoopDialogEvent= new EventEmitter<Message>();
+  @Output() openNewLoopDialogEvent = new EventEmitter<Message>();
+  @Output() deleteMessageEvent = new EventEmitter<{ message: Message, prev: Message }>();
 
-  colors:string[] = ['Red', 'Yellow', 'Green', 'Blue'];
+  @Input() choiceForm = this.formBuilder.group({
+    choices: this.formBuilder.array([]),
+  });
+  @Output() choiceFormChange = new EventEmitter<FormGroup>();
+
+  get choices() {
+    return this.choiceForm.get('choices') as FormArray;
+  }
+
+  colors: string[] = ['Red', 'Yellow', 'Green', 'Blue'];
+
+  selectedMessage:string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router) { }
+  
   ngOnChanges(changes: SimpleChanges): void {
     let index = 0;
     const msgChange = changes['messages'];
@@ -91,14 +104,6 @@ export class MessageListViewComponent implements OnChanges {
     }
   }
 
-  choiceForm = this.formBuilder.group({
-    choices: this.formBuilder.array([]),
-  });
-
-  get choices() {
-    return this.choiceForm.get('choices') as FormArray;
-  }
-
   addChoice(value: string) {
     this.choices.push(this.formBuilder.control(value));
   }
@@ -111,14 +116,14 @@ export class MessageListViewComponent implements OnChanges {
     return this.messages.filter(m => m.showOptions == true && this.messages.indexOf(m) <= index).length - 1;
   }
 
-  onFlag(id:string, color:string) {
+  onFlag(id: string, color: string) {
     const msg = this.messages.find(x => x.id == id);
     if (msg != undefined) {
       if (msg.flags == undefined) {
         msg.flags = [];
       }
       if (msg.flags.includes(color)) {
-        msg.flags = msg.flags.filter(x => x != color); 
+        msg.flags = msg.flags.filter(x => x != color);
       } else {
         msg.flags.push(color);
       }
@@ -126,7 +131,11 @@ export class MessageListViewComponent implements OnChanges {
     this.messagesChange.emit(this.messages);
   }
 
-  openDialog(message:Message) {
+  openDialog(message: Message) {
     this.openNewLoopDialogEvent.emit(message);
+  }
+
+  deleteMessage(message: Message, index: number) {
+    this.deleteMessageEvent.emit({ message: message, prev: this.messages[index - 1] });
   }
 }

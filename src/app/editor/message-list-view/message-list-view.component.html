@@ -23,6 +23,10 @@
                                         <mat-icon>loop</mat-icon>
                                         <span>Loop to</span>
                                     </button>
+                                    <button mat-menu-item (click)="deleteMessage(message, $index)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>Delete</span>
+                                    </button>
                                 </mat-menu>
                                 <mat-menu #flags="matMenu">
                                     @for (color of colors; track $index) {

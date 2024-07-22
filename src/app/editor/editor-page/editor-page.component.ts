@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { GraphVisualComponent } from '../../graph-visual/graph-visual.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListViewComponent } from "../../list-view/list-view.component";
@@ -29,6 +29,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { PhoneScreenComponent } from "../../phone-screen/phone-screen.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MessagesComponent } from "../../messages/messages.component";
+import { FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-editor-page',
@@ -46,14 +47,14 @@ import { MessagesComponent } from "../../messages/messages.component";
     PhoneScreenComponent,
     MatIconModule,
     MessagesComponent
-],
+  ],
   providers: [
     CookieService
   ],
   templateUrl: './editor-page.component.html',
   styleUrl: './editor-page.component.scss'
 })
-export class EditorPageComponent implements OnInit {
+export class EditorPageComponent implements OnInit, OnChanges {
 
   // graph: Node[] = [
   //   { id: 'start', edges: ['1', '2', '5'] },
@@ -73,7 +74,8 @@ export class EditorPageComponent implements OnInit {
     {
       id: 'M-1', body: "It's a beautiful day today!!", sender: "contact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
         { id: 'O0-1', next: 'M-2', text: "Good Morning!" },
-        { id: 'O1-1', next: 'M-3', text: "It sure is!" }
+        { id: 'O1-1', next: 'M-3', text: "It sure is!" },
+        { id: 'O2-1', next: 'M-3', text: "..." }
       ]
     },
     {
@@ -99,12 +101,25 @@ export class EditorPageComponent implements OnInit {
 
   isDrawerOpen: boolean = true;
 
+  choiceForm = this.formBuilder.group({
+    choices: this.formBuilder.array([]),
+  });
+
+  get choices() {
+    return this.choiceForm.get('choices') as FormArray;
+  }
+
   constructor(
     private graphService: GraphService,
     private messageService: MessageService,
     private cookieService: CookieService,
-    public dialog: MatDialog
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog,
   ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.saveToCookie();
+  }
 
   ngOnInit(): void {
     this.loadFromCookie();
@@ -132,7 +147,9 @@ export class EditorPageComponent implements OnInit {
       if (lastMessage == undefined) throw new Error();
       if (lastMessage.showOptions && this.selectedResponseOptions.length > 0) {
         const selectedId = this.selectedResponseOptions[this.selectedResponseOptions.length - 1];
-        const selectedOption = lastMessage.responseOptions.find(x => x.id == selectedId);
+        let selectedOption = lastMessage.responseOptions.find(x => x.id == selectedId);
+        console.log(selectedOption);
+
         if (selectedOption != undefined) selectedOption.next = e.id;
       } else {
         lastMessage.next = id;
@@ -145,14 +162,16 @@ export class EditorPageComponent implements OnInit {
 
   addOption(e: ResponseOption) {
     if (this.messagePath.length > 0) {
-      const lastTree = this.messagePath[this.messagePath.length - 1];
-      const last = this.messageTree.find(x => x.id == lastTree.id);
+      const lastPath = this.messagePath[this.messagePath.length - 1];
+      const last = this.messageTree.find(x => x.id == lastPath.id);
       if (last != undefined) {
         last.showOptions = true;
-        lastTree.showOptions = true;
+        // lastTree.showOptions = true;
         e.id = 'O' + last.responseOptions.length + '-' + last.id.split('-')[1]
+        this.choices.push(this.formBuilder.control(e.id));
+        this.selectedResponseOptions.push(e.id);
         last.responseOptions.push(e);
-        lastTree.responseOptions.push(e);
+        // lastTree.responseOptions.push(e);
       }
     }
     this.saveToCookie();
@@ -185,14 +204,13 @@ export class EditorPageComponent implements OnInit {
         return orderedMessagePath;
       }
       node = messageTree.find(x => x.id == next);
-      if (node != undefined) {
-        orderedMessagePath.push(node);
-        next = node.next;
-        if (node.showOptions && choices != undefined) {
-          const option = node.responseOptions.find(m => m.id == choices[index]) ?? node.responseOptions[0];
-          next = option?.next;
-          index++;
-        }
+      if (node == undefined) return orderedMessagePath;
+      orderedMessagePath.push(node);
+      next = node.next;
+      if (node.showOptions && choices != undefined) {
+        const option = node.responseOptions.find(m => m.id == choices[index]) ?? node.responseOptions[0];
+        next = option?.next;
+        index++;
       }
     }
     return orderedMessagePath;
@@ -246,7 +264,36 @@ export class EditorPageComponent implements OnInit {
     this.saveToCookie();
   }
 
+  deleteMessage(e: { message: Message, prev: Message }) {
+    let prev = this.messageTree.find(x => x.id == e.prev.id);
+    if (e.message.showOptions) {
+      const option = e.message.responseOptions.find(x => this.selectedResponseOptions.includes(x.id))
+      if (option != undefined) {
+        const index = e.message.responseOptions.indexOf(option)
+        e.message.next = e.message.responseOptions[index].next;
+      }
+    }
+    if (prev != undefined) {
+      if (prev.showOptions) {
+        const option = prev.responseOptions.find(x => this.selectedResponseOptions.includes(x.id))
+        if (option != undefined) {
+          const index = prev.responseOptions.indexOf(option)
+          prev.responseOptions[index].next = e.message.next;
+        }
+      } else {
+        prev.next = e.message.next;
+      }
+    }
+    const index = this.messageTree.indexOf(e.message);
+    if (index > -1) {
+      this.messageTree.splice(index, 1);
+    }
+
+    this.messagePath = this.takeMessagePath(this.messageTree, this.selectedResponseOptions);
+  }
+
   saveToCookie() {
+    console.log(this.messageTree);
     this.cookieService.set('MessageTree', JSON.stringify(this.messageTree));
   }
 

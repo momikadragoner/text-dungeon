@@ -37,7 +37,7 @@ export class MessageFormComponent {
   onSubmit() {
     if(!this.messageForm.valid) return;
     const formValue = this.messageForm.value;
-    if (formValue.sender == undefined || formValue.body == undefined || formValue.wait == undefined) {
+    if (formValue.sender == undefined || formValue.body == undefined) {
       throw new Error();
     }
     if (formValue.sender == 'player') {
@@ -54,7 +54,7 @@ export class MessageFormComponent {
         sender: formValue.sender,
         body: formValue.body,
         next: undefined,
-        wait: formValue.wait,
+        wait: formValue.wait ?? 0,
         showOptions: false,
         responseOptions: [],
         knowledge: undefined

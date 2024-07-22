@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Message } from '../game/model/message.model';
@@ -46,17 +46,16 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class MessagesComponent {
 
-  /**
-   *
-   */
   constructor() {
-    this.reciveMessage('M-0');
+    this.reciveMessage(this.startPoint);
   }
   responseBoxVisible = false;
 
   messages: Message[] = [];
 
-  incomingMessages: Message[] = [
+  @Input() startPoint:string = 'M-0';
+
+  @Input() messageTree: Message[] = [
     { id: 'M-0', body: "Hello Word!", sender: "conact", next: 'M-1', wait: 0, showOptions: false, responseOptions: [] },
     {
       id: 'M-1', body: "It's a beautiful day today!!", sender: "contact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
@@ -90,7 +89,7 @@ export class MessagesComponent {
   }
 
   async reciveMessage(id:string) {
-    let msg: Message | undefined = this.incomingMessages.find(x => x.id == id);
+    let msg: Message | undefined = this.messageTree.find(x => x.id == id);
     if (msg == undefined) {
       throw new Error();
     }

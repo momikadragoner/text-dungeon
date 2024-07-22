@@ -14,10 +14,12 @@
         </div>
     </mat-drawer>
     <mat-drawer-content>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100" (selectedTabChange)="onSelectedTabChange($event)">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100"
+            (selectedTabChange)="onSelectedTabChange($event)">
             <mat-tab label="Write" bodyClass="w-100 h-100 height">
-                <message-list-view (pathChange)="onPathChange($event)" [(messages)]="messagePath" (openNewLoopDialogEvent)="openDialog($event)"
-                    class="reverse"></message-list-view>
+                <message-list-view [(choiceForm)]="choiceForm" (pathChange)="onPathChange($event)"
+                    [(messages)]="messagePath" (openNewLoopDialogEvent)="openDialog($event)"
+                    (deleteMessageEvent)="deleteMessage($event)" class="reverse"></message-list-view>
                 <div class="bottom d-flex justify-content-center">
                     <div>
                         <button class="row-button" mat-raised-button>
@@ -44,7 +46,7 @@
             </mat-tab>
             <mat-tab label="Preview">
                 <phone-screen>
-                    <messages></messages>
+                    <messages [messageTree]="messageTree"></messages>
                 </phone-screen>
             </mat-tab>
         </mat-tab-group>

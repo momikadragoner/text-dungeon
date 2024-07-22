@@ -80,7 +80,7 @@ $sys-bg: white;
 }
 
 .response-box {
-    height: 20%;
+    // height: 20%;
     // margin-bottom: 2rem;
     padding-top: 2rem;
     border-bottom-left-radius: 3rem;
@@ -112,6 +112,10 @@ $sys-bg: white;
 
 .padding-top {
     height: 1rem;
+}
+
+.padding-bottom {
+    height: 2rem;
 }
 
 .w-100 {
