@@ -57,6 +57,7 @@ export class MessageListViewComponent implements OnChanges {
   @Output() pathChange = new EventEmitter<any>();
   @Output() messagesChange = new EventEmitter<Message[]>();
   @Output() openNewLoopDialogEvent = new EventEmitter<Message>();
+  @Output() openEditMessageDialogEvent = new EventEmitter<Message>();
   @Output() deleteMessageEvent = new EventEmitter<{ message: Message, prev: Message }>();
 
   @Input() choiceForm = this.formBuilder.group({
@@ -133,6 +134,10 @@ export class MessageListViewComponent implements OnChanges {
 
   openDialog(message: Message) {
     this.openNewLoopDialogEvent.emit(message);
+  }
+
+  editMessage(message: Message) {
+    this.openEditMessageDialogEvent.emit(message);
   }
 
   deleteMessage(message: Message, index: number) {

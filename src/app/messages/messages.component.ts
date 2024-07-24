@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Message } from '../game/model/message.model';
@@ -44,16 +44,18 @@ import { MatAccordion } from '@angular/material/expansion';
     ])
   ]
 })
-export class MessagesComponent {
+export class MessagesComponent implements OnChanges {
 
   constructor() {
+  }
+  ngOnChanges(changes: SimpleChanges): void {
     this.reciveMessage(this.startPoint);
   }
   responseBoxVisible = false;
 
   messages: Message[] = [];
 
-  @Input() startPoint:string = 'M-0';
+  @Input() startPoint:string = '0';
 
   @Input() messageTree: Message[] = [
     { id: 'M-0', body: "Hello Word!", sender: "conact", next: 'M-1', wait: 0, showOptions: false, responseOptions: [] },
@@ -111,10 +113,10 @@ export class MessagesComponent {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  messageStyle(id: string): string {
+  messageStyle(id: string, index:number): string {
     var style: string = "";
     var item: any = this.messages.find(x => x.id == id);
-    var index: number = this.messages.indexOf(item);
+    // var index: number = this.messages.indexOf(item);
     var m = this.messages;
     if (item.sender == "player") {
       style += "primary";

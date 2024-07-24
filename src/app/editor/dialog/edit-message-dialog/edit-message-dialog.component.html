@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Edit Message</h2>
+<mat-dialog-content>
+    <form [formGroup]="messageForm">
+            <mat-form-field appearance="outline" id="senderInput" class="w-100">
+                <mat-label>Sender</mat-label>
+                <mat-select formControlName="sender">
+                    @for (profile of data.profiles; track $index) {
+                        <mat-option [value]="profile.id">{{profile.username}}</mat-option>
+                    }
+                    <mat-option value="system">System Message</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" id="textInput" class="w-100">
+                <mat-label>Text</mat-label>
+                <input matInput type="text" formControlName="body">
+                <!-- <mat-hint>Hint</mat-hint> -->
+            </mat-form-field>
+            <mat-form-field appearance="outline" id="waitInput" class="w-100">
+                <mat-label>Wait (ms)</mat-label>
+                <input matInput type="number" formControlName="wait">
+            </mat-form-field>
+            <mat-form-field appearance="outline" id="nextInput" class="w-100">
+                <mat-label>Next</mat-label>
+                <mat-select formControlName="next">
+                    <mat-option value="undefined">None</mat-option>
+                    @for (message of tree; track $index) {
+                    <mat-option [value]="message.id">#{{message.id}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close cdkFocusInitial (click)="onCancelClick()">Cancel</button>
+    <button mat-button mat-dialog-close (click)="onSaveClick()">Save</button>
+</mat-dialog-actions>

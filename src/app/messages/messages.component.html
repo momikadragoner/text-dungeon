@@ -6,9 +6,9 @@
 <div class="scroll container reverse">
     <div>
         <div class="padding-top"></div>
-        @for (message of messages; track message.id) {
+        @for (message of messages; track $index) {
             <div @arrivingMessages class="d-flex {{messageJustify(message.sender)}}">
-                <div class="message {{messageStyle(message.id)}}">{{ message.body }}</div>
+                <div class="message {{messageStyle(message.id, $index)}}">{{ message.body }}</div>
             </div>
         }
         <div class="padding-bottom"></div>

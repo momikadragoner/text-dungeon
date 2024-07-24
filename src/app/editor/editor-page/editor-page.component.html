@@ -19,7 +19,8 @@
             <mat-tab label="Write" bodyClass="w-100 h-100 height">
                 <message-list-view [(choiceForm)]="choiceForm" (pathChange)="onPathChange($event)"
                     [(messages)]="messagePath" (openNewLoopDialogEvent)="openDialog($event)"
-                    (deleteMessageEvent)="deleteMessage($event)" class="reverse"></message-list-view>
+                    (openEditMessageDialogEvent)="openEditDialog($event)" (deleteMessageEvent)="deleteMessage($event)"
+                    class="reverse"></message-list-view>
                 <div class="bottom d-flex justify-content-center">
                     <div>
                         <button class="row-button" mat-raised-button>
@@ -34,6 +35,42 @@
                             </mat-icon>
                             Link Back
                         </button>
+                        <button mat-raised-button class="row-button" [matMenuTriggerFor]="cardMoreMenu">
+                            <mat-icon>more_vert</mat-icon>
+                            More
+                        </button>
+                        <mat-menu #cardMoreMenu="matMenu">
+                            <button mat-menu-item [matMenuTriggerFor]="file">
+                                <span>File</span>
+                            </button>
+                            <button mat-menu-item [matMenuTriggerFor]="view">
+                                <span>View</span>
+                            </button>
+                            <button mat-menu-item [matMenuTriggerFor]="select">
+                                <span>Select</span>
+                            </button>
+                        </mat-menu>
+                        <mat-menu #file="matMenu">
+                            <button mat-menu-item>
+                                <span>Save</span>
+                            </button>
+                            <button mat-menu-item>
+                                <span>Load</span>
+                            </button>
+                        </mat-menu>
+                        <mat-menu #view="matMenu">
+                            <button mat-menu-item>
+                                <span (click)="isDrawerOpen=!isDrawerOpen">Overview panel</span>
+                            </button>
+                        </mat-menu>
+                        <mat-menu #select="matMenu">
+                            <button mat-menu-item>
+                                <span (click)="selectedMessageId = '0'">First</span>
+                            </button>
+                            <button mat-menu-item>
+                                <span (click)="selectedMessageId = messagePath[messagePath.length-1].id">Last</span>
+                            </button>
+                        </mat-menu>
                         <div class="form shadow">
                             <message-form (messageChange)="addMessage($event)"
                                 (newResponseOption)="addOption($event)"></message-form>
