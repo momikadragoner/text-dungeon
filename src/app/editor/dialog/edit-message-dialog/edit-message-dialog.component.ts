@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { UserProfile } from '../../../game/model/profile.model';
+import { ContactProfile } from '../../../game/model/profile.model';
 
 @Component({
   selector: 'app-edit-message-dialog',
@@ -21,7 +21,7 @@ export class EditMessageDialogComponent {
   readonly data = inject<EditMessageDialogComponent>(MAT_DIALOG_DATA);
   readonly formBuilder = inject(FormBuilder);
   readonly tree: Message[] = this.data.tree;
-  readonly profiles: UserProfile[] = this.data.profiles;
+  readonly profiles: ContactProfile[] = this.data.profiles;
   get message(): Message { return this.data.message }
 
   messageForm = this.formBuilder.group({

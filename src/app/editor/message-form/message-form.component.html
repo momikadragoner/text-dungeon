@@ -5,7 +5,9 @@
                 <mat-label>Sender</mat-label>
                 <mat-select formControlName="sender" (valueChange)="onSenderChange($event)">
                     <mat-option value="player">Player Response Option</mat-option>
-                    <mat-option value="contact">Conact One</mat-option>
+                    @for (profile of profiles; track $index) {
+                    <mat-option [value]="profile.id">{{profile.username}}</mat-option>
+                    }
                     <mat-option value="system">System Message</mat-option>
                 </mat-select>
             </mat-form-field>

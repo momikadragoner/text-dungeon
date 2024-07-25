@@ -7,25 +7,33 @@
     <div>
         <div class="padding-top"></div>
         @for (message of messages; track $index) {
-            <div @arrivingMessages class="d-flex {{messageJustify(message.sender)}}">
+        <div @arrivingMessages>
+            @if (showUserName(message, $index)) {
+            <div class="d-flex justify-content-start">
+                <span class="contact-name">{{getUsername(message.sender)}}</span>
+            </div>
+            }
+            <div class="d-flex {{messageJustify(message.sender)}}">
+                <div class="color {{getColor(message, $index)}}"></div>
                 <div class="message {{messageStyle(message.id, $index)}}">{{ message.body }}</div>
             </div>
+        </div>
         }
         <div class="padding-bottom"></div>
         @if (responseBoxVisible) {
-            <div class="padding"></div>
+        <div class="padding"></div>
         }
     </div>
 </div>
 <div class="inside"></div>
 @if (responseBoxVisible) {
-    <div @changeResponseBoxVisibility class="response-box bottom w-100 s">
-        <mat-accordion>
-            @for (response of responses; track response.id) {
-                    <button (click)="respond(response.id)" class="response-button w-90" mat-fab extended>{{response.text}}</button>
-            }
-        </mat-accordion>
-    </div>
+<div @changeResponseBoxVisibility class="response-box bottom w-100 s">
+    <mat-accordion>
+        @for (response of responses; track response.id) {
+        <button (click)="respond(response.id)" class="response-button w-90" mat-fab extended>{{response.text}}</button>
+        }
+    </mat-accordion>
+</div>
 }
 <!-- <div class="bottom" style="display: flex; justify-content: center;">
     <div>
@@ -34,4 +42,4 @@
               Sorry, your browser does not support inline SVG.
         </svg>
     </div>
-</div> --> 
+</div> -->

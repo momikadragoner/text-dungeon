@@ -5,11 +5,12 @@ import { Message } from '../game/model/message.model';
 import { animate, query, stagger, state, style, transition, trigger } from '@angular/animations';
 import { ResponseOption } from '../game/model/response.model';
 import { MatAccordion } from '@angular/material/expansion';
+import { ContactProfile } from '../game/model/profile.model';
 
 @Component({
   selector: 'messages',
   standalone: true,
-  imports: [MatFabButton, MatGridListModule, MatAccordion ],
+  imports: [MatFabButton, MatGridListModule, MatAccordion],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.scss',
   animations: [
@@ -33,7 +34,7 @@ import { MatAccordion } from '@angular/material/expansion';
     ),
     trigger('arrivingMessages', [
       transition(':enter', [
-        query('.message', [
+        query(':self', [
           style({ opacity: 0, transform: 'translateY(100px)' }),
           stagger(30, [
             animate('500ms cubic-bezier(0.35, 0, 0.25, 1)',
@@ -55,28 +56,9 @@ export class MessagesComponent implements OnChanges {
 
   messages: Message[] = [];
 
-  @Input() startPoint:string = '0';
-
-  @Input() messageTree: Message[] = [
-    { id: 'M-0', body: "Hello Word!", sender: "conact", next: 'M-1', wait: 0, showOptions: false, responseOptions: [] },
-    {
-      id: 'M-1', body: "It's a beautiful day today!!", sender: "contact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
-        { id: 'O0-1', next: 'M-2', text: "Good Morning!" },
-        { id: 'O1-1', next: 'M-3', text: "It sure is!" }
-      ]
-    },
-    {
-      id: 'M-2', body: "To you too!", sender: "conact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
-        { id: 'O0-2', next: 'M-4', text: "Have you heard the news" },
-        { id: 'O1-2', next: undefined, text: "What if..." }
-      ]
-    },
-    { id: 'M-3', body: "I just love basking in the sun!", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
-    { id: 'M-4', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-5', wait: 1000, showOptions: false, responseOptions: [] },
-    { id: 'M-5', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-6', wait: 1000, showOptions: false, responseOptions: [] },
-    { id: 'M-6', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-7', wait: 1000, showOptions: false, responseOptions: [] },
-    { id: 'M-7', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
-  ];
+  @Input() profiles: ContactProfile[] = [];
+  @Input() startPoint: string = '0';
+  @Input() messageTree: Message[] = [];
 
   responses: ResponseOption[] = [];
 
@@ -84,13 +66,13 @@ export class MessagesComponent implements OnChanges {
     let resp: ResponseOption | undefined = this.responses.find(x => x.id == id);
     if (resp == undefined || resp.next == undefined) throw new Error();
     this.messages.push({
-      id:resp.id, body:resp.text, sender:"player", next:"0", showOptions:false, wait:0, responseOptions:[]
+      id: resp.id, body: resp.text, sender: "player", next: "0", showOptions: false, wait: 0, responseOptions: []
     });
     this.toggleResponseBoxVisibility();
     this.reciveMessage(resp.next);
   }
 
-  async reciveMessage(id:string) {
+  async reciveMessage(id: string) {
     let msg: Message | undefined = this.messageTree.find(x => x.id == id);
     if (msg == undefined) {
       throw new Error();
@@ -110,10 +92,10 @@ export class MessagesComponent implements OnChanges {
   }
 
   delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  messageStyle(id: string, index:number): string {
+  messageStyle(id: string, index: number): string {
     var style: string = "";
     var item: any = this.messages.find(x => x.id == id);
     // var index: number = this.messages.indexOf(item);
@@ -146,6 +128,22 @@ export class MessagesComponent implements OnChanges {
         break;
     }
     return justify;
+  }
+
+  getUsername(id:string) {
+    return this.profiles.find(x => x.id == id)?.username;
+  }
+
+  getColor(m: Message, index: number) {
+    if (this.showUserName(m, index)) {
+      return 'gradient-' + this.profiles.find(x => x.id == m.sender)?.color;
+    }
+    return 'none';
+  }
+
+  showUserName(m: Message, index: number) {
+    const layer = this.layerDecide(this.messages, index);
+    return (layer == 'top' || layer == 'none' && m.sender != 'player' && m.sender != 'system');
   }
 
   layerDecide(m: Message[], index: number): string {

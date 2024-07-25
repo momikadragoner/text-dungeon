@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Message } from '../../game/model/message.model';
 import { ResponseOption } from '../../game/model/response.model';
 import { MatAccordion } from '@angular/material/expansion';
+import { ContactProfile } from '../../game/model/profile.model';
 
 @Component({
   selector: 'message-form',
@@ -33,6 +34,8 @@ export class MessageFormComponent {
   @Output() messageChange = new EventEmitter<Message>();
 
   @Output() newResponseOption = new EventEmitter<ResponseOption>();
+
+  @Input() profiles:ContactProfile[] = [];
 
   onSubmit() {
     if(!this.messageForm.valid) return;

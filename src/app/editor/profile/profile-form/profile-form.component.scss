@@ -1,0 +1,41 @@
+.input {
+    margin-right: 1rem;
+}
+
+.color-option {
+    padding: .5rem;
+}
+
+.color-list {
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+.color {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 2rem;
+    margin: auto;
+}
+
+.gradient-blue {
+    background-image: linear-gradient(90deg, #5B85AA, #372248);
+}
+
+.gradient-green {
+    background-image: linear-gradient(90deg, #395B50, #1F2F16);
+}
+
+.gradient-yellow {
+    background-image: linear-gradient(90deg, #E5B769, #D8CC34);
+}
+
+.gradient-orange {
+    background-image: linear-gradient(90deg, #F44708, #A10702);
+}
+
+.gradient-pink {
+    background: radial-gradient(circle at 100%, #F7A1C4, #DC7F9B);
+}
+
+//https://coolors.co/04e762-f5b700-00a1e4-dc0073-89fc00

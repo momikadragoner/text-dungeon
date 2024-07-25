@@ -27,7 +27,12 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { MessageTreeService } from '../../game/services/message-tree.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { EditMessageDialogComponent } from '../dialog/edit-message-dialog/edit-message-dialog.component';
-import { UserProfile } from '../../game/model/profile.model';
+import { ContactProfile } from '../../game/model/profile.model';
+import { ProfileDialogComponent } from '../dialog/profile-dialog/profile-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProfileListViewComponent } from "../profile/profile-list-view/profile-list-view.component";
+import { GameState } from '../../game/model/game-state.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editor-page',
@@ -45,7 +50,9 @@ import { UserProfile } from '../../game/model/profile.model';
     PhoneScreenComponent,
     MatIconModule,
     MessagesComponent,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressSpinnerModule,
+    ProfileListViewComponent
   ],
   providers: [
     CookieService
@@ -87,7 +94,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
     // { id: 'M-4', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-5', wait: 1000, showOptions: false, responseOptions: [] },
     // { id: 'M-5', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
   ];
-  profiles:UserProfile[] = [{id:'contact-one', username:'Contact One', color:'red'}]
+  profiles: ContactProfile[] = [{ id: 'contact-one', username: 'Contact One', color: 'blue' }]
 
   selectedMessageId: string | undefined;
 
@@ -99,7 +106,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
   visualNodes: VisualNode[] = [];
   visualEdges: VisualEdge[] = [];
 
-  isDrawerOpen: boolean = true;
+  isDrawerOpen: boolean = false;
 
   choiceForm = this.formBuilder.group({
     choices: this.formBuilder.array([]),
@@ -123,6 +130,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
     private graphService: GraphService,
     private cookieService: CookieService,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
     public dialog: MatDialog,
   ) { }
 
@@ -137,6 +145,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
     this.graph = this.messageService.gameTreeToGraph(this.messageTreeService.messageTree);
     this.visualNodes = this.graphService.computeVisualNodes(this.graph, this.nodeStyle);
     this.visualEdges = this.graphService.computeVisualEdges(this.visualNodes, this.edgeStyle);
+
     // console.log(this.visualNodes);
     // console.log(this.visualEdges);
     // console.log(this.messageTree)
@@ -149,7 +158,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      console.log("Error: Message could not be added");
+      this.snackBar.open("Message could not be added", "Close", { horizontalPosition: 'end' })
     }
   }
 
@@ -164,7 +173,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      console.log("Error: Option could not be added");
+      this.snackBar.open("Option could not be added", "Close", { horizontalPosition: 'end' })
     }
   }
 
@@ -224,19 +233,40 @@ export class EditorPageComponent implements OnInit, OnChanges {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      console.log('Error: could not delete message');
+      this.snackBar.open("Could not delete message", "Close", { horizontalPosition: 'end' })
     }
   }
 
+  openProfileDialog() {
+    let dialogRef = this.dialog.open(ProfileDialogComponent, {
+      data: {
+        type: 'add'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.profiles.push(result);
+        console.log(this.profiles);
+      }
+    });
+    this.saveToCookie();
+  }
+
   saveToCookie() {
-    console.log(this.messageTree);
-    this.cookieService.set('MessageTree', JSON.stringify(this.messageTree));
+    const gameState: GameState = {
+      profiles: this.profiles,
+      messageTree: this.messageTree
+    };
+    this.cookieService.set('gameState', JSON.stringify(gameState));
   }
 
   loadFromCookie(): boolean {
-    let cookieValue = this.cookieService.get('MessageTree');
+    let cookieValue = this.cookieService.get('gameState');
     try {
-      this.messageTree = (JSON.parse(cookieValue));
+      const gameState: GameState = (JSON.parse(cookieValue));
+      this.profiles = gameState.profiles;
+      this.messageTree = gameState.messageTree;
       return true;
     } catch (e) {
       return false;

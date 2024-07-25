@@ -11,6 +11,7 @@
         <div class="container">
             <h2 class="heading">Graph</h2>
             <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
+            <profile-list-view [profiles]="profiles"></profile-list-view>
         </div>
     </mat-drawer>
     <mat-drawer-content>
@@ -23,7 +24,7 @@
                     class="reverse"></message-list-view>
                 <div class="bottom d-flex justify-content-center">
                     <div>
-                        <button class="row-button" mat-raised-button>
+                        <button class="row-button" mat-raised-button (click)="openProfileDialog()">
                             <mat-icon>
                                 person_add
                             </mat-icon>
@@ -72,18 +73,26 @@
                             </button>
                         </mat-menu>
                         <div class="form shadow">
-                            <message-form (messageChange)="addMessage($event)"
-                                (newResponseOption)="addOption($event)"></message-form>
+                            <message-form (messageChange)="addMessage($event)" (newResponseOption)="addOption($event)"
+                                [profiles]="profiles"></message-form>
                         </div>
                     </div>
                 </div>
             </mat-tab>
             <mat-tab label="Graph">
+                @defer {
                 <graph-visual class="height" [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
+                } @placeholder {
+                <mat-spinner></mat-spinner>
+                }
             </mat-tab>
             <mat-tab label="Preview">
                 <phone-screen>
-                    <messages [messageTree]="messageTree"></messages>
+                    @defer {
+                    <messages [messageTree]="messageTree" [profiles]="profiles"></messages>
+                    } @placeholder {
+                    <mat-spinner></mat-spinner>
+                    }
                 </phone-screen>
             </mat-tab>
         </mat-tab-group>

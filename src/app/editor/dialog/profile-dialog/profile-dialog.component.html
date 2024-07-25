@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Add New Profile</h2>
+<mat-dialog-content>
+    <div class="container">
+        <profile-form [(profile)]="profile"></profile-form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close cdkFocusInitial (click)="onCancelClick()">Cancel</button>
+    <button mat-button mat-dialog-close (click)="onSaveClick()">Save</button>
+</mat-dialog-actions>
