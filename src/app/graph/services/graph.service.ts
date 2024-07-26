@@ -14,6 +14,8 @@ export class GraphService {
   constructor() { }
 
   computeVisualNodes(graph: Node[], styleObj: nodeStyle, startNode?: string): VisualNode[] {
+    if (graph.length == 0) return [];
+
     const unit = this.getUnit(styleObj.margin);
     const margin = this.getValue(styleObj.margin);
     const height = this.getValue(styleObj.height);
@@ -21,7 +23,7 @@ export class GraphService {
     const workNodes: VisualNode[] = [];
 
     if (startNode == undefined) {
-      startNode = graph[graph.length - 1].id;
+      startNode = graph[0].id;
     }
 
     // run bfs and separate into groups
@@ -48,8 +50,8 @@ export class GraphService {
     let grp = 1;
     let level = 0;
     nodes.sort((a, b) => this.sortByGroupThenDistance(a.group, b.group, a.distance, b.distance));
-    console.log({sorted: nodes});
-    
+    console.log({ sorted: nodes });
+
     nodes.forEach(w => {
       w.adjacent = this.getAdjacentNodes(graph, w.id);
       if (w.distance != undefined && w.group != undefined) {
@@ -213,8 +215,8 @@ export class GraphService {
     const midPointX = (Ax + Bx) / 2;
     const midPointY = (Ay + By) / 2;
 
-    if (Ax == Bx) return { x: midPointX + distance, y:midPointY};
-    if (Ay == By) return { x: midPointX, y:midPointY + distance};
+    if (Ax == Bx) return { x: midPointX + distance, y: midPointY };
+    if (Ay == By) return { x: midPointX, y: midPointY + distance };
 
     const slope = -1 * ((Bx - Ax) / (By - Ay));
     const delta = distance / Math.sqrt(slope * slope + 1);
@@ -224,7 +226,7 @@ export class GraphService {
     return { x: Math.round(xPerpendicular), y: Math.round(yPerpendicular) };
   }
 
-  sortByGroupThenDistance(groupA?:number, groupB?:number, distanceA?:number, distanceB?:number) {
+  sortByGroupThenDistance(groupA?: number, groupB?: number, distanceA?: number, distanceB?: number) {
     if (groupA == undefined || groupB == undefined || distanceA == undefined || distanceB == undefined) {
       throw new Error();
     }
