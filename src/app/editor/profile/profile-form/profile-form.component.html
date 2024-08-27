@@ -1,35 +1,35 @@
 <form [formGroup]="profileForm">
-    <mat-form-field appearance="outline" id="usernameInput" class="input">
-        <mat-label>Username</mat-label>
-        <input matInput type="text" formControlName="username">
-    </mat-form-field>
-    <mat-form-field appearance="outline" id="fullNameInput" class="input">
-        <mat-label>Name</mat-label>
-        <input matInput type="text" formControlName="fullName">
-    </mat-form-field>
-    <mat-chip-listbox multiple="false" required="true" class="color-list" formControlName="color">
-        <mat-chip-option selected class="color-option" value="blue">
-            <div class="color gradient-blue"></div>
-        </mat-chip-option>
-        <mat-chip-option class="color-option" value="green">
-            <div class="color gradient-green"></div>
-        </mat-chip-option>
-        <mat-chip-option class="color-option" value="orange">
-            <div class="color gradient-orange"></div>
-        </mat-chip-option>
-        <mat-chip-option class="color-option" value="yellow">
-            <div class="color gradient-yellow"></div>
-        </mat-chip-option>
-        <mat-chip-option class="color-option" value="pink">
-            <div class="color gradient-pink"></div>
-        </mat-chip-option>
-      </mat-chip-listbox>
-    <mat-form-field appearance="outline" id="pictureInput" class="w-100">
-        <mat-label>Profile Picture URL</mat-label>
-        <input matInput type="text" formControlName="pictureUrl">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Description</mat-label>
-        <textarea matInput></textarea>
-      </mat-form-field>
+  <mat-form-field appearance="outline" id="usernameInput" class="input">
+    <mat-label>Username</mat-label>
+    <input matInput type="text" formControlName="username">
+  </mat-form-field>
+  <mat-form-field appearance="outline" id="fullNameInput" class="input">
+    <mat-label>Name</mat-label>
+    <input matInput type="text" formControlName="fullName">
+  </mat-form-field>
+  <mat-chip-listbox multiple="false" required="true" class="color-list" formControlName="color">
+    <mat-chip-option selected class="color-option" value="blue">
+      <div class="color gradient-blue"></div>
+    </mat-chip-option>
+    <mat-chip-option class="color-option" value="green">
+      <div class="color gradient-green"></div>
+    </mat-chip-option>
+    <mat-chip-option class="color-option" value="orange">
+      <div class="color gradient-orange"></div>
+    </mat-chip-option>
+    <mat-chip-option class="color-option" value="yellow">
+      <div class="color gradient-yellow"></div>
+    </mat-chip-option>
+    <mat-chip-option class="color-option" value="pink">
+      <div class="color gradient-pink"></div>
+    </mat-chip-option>
+  </mat-chip-listbox>
+  <mat-form-field appearance="outline" id="pictureInput" class="w-100">
+    <mat-label>Profile Picture URL</mat-label>
+    <input matInput type="text" formControlName="pictureUrl">
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
 </form>

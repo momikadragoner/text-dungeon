@@ -1,0 +1,23 @@
+.code-view {
+  background-color: black;
+  color: whitesmoke;
+}
+
+.header {
+  background-color: darkgray;
+  padding: .1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.code-title {
+  vertical-align: middle;
+  color: black;
+  margin-top: .5rem;
+  margin-left: .5rem;
+}
+
+pre {
+  padding: .2rem;
+  overflow-x: scroll;
+}

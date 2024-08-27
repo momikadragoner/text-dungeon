@@ -1,6 +1,29 @@
 <mat-list>
-    @for (profile of profiles; track $index) {
-    <mat-list-item>{{profile.username}}</mat-list-item>
-    <mat-divider></mat-divider>
-    }
 </mat-list>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Profiles </mat-panel-title>
+    </mat-expansion-panel-header>
+    @for (profile of profiles; track $index) {
+    <mat-card class="card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <span>
+            {{profile.username}}
+          </span>
+          <span class="color" [class]="'gradient-' + profile.color"></span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <span>
+          {{profile.fullName}}
+        </span>
+        <div>
+          {{profile.description}}
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+  </mat-expansion-panel>
+</mat-accordion>

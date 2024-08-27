@@ -33,7 +33,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileListViewComponent } from "../profile/profile-list-view/profile-list-view.component";
 import { GameState } from '../../game/model/game-state.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { CodeViewComponent } from "../code-view/code-view.component";
 @Component({
   selector: 'app-editor-page',
   standalone: true,
@@ -52,7 +52,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MessagesComponent,
     MatMenuModule,
     MatProgressSpinnerModule,
-    ProfileListViewComponent
+    ProfileListViewComponent,
+    CodeViewComponent
   ],
   providers: [
     CookieService
@@ -107,6 +108,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
   visualEdges: VisualEdge[] = [];
 
   isDrawerOpen: boolean = false;
+  drawerWindow: string = 'None';
 
   choiceForm = this.formBuilder.group({
     choices: this.formBuilder.array([]),
@@ -219,7 +221,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
         console.log(result);
-        
+
         this.messageTreeService.editMessage(result);
         this.messageTreeService.takeMessagePath(this.selectedOptions);
         this.saveToCookie();
@@ -260,6 +262,24 @@ export class EditorPageComponent implements OnInit, OnChanges {
       }
     });
     this.saveToCookie();
+  }
+
+  get JsonGameState() {
+    const gameState: GameState = {
+      profiles: this.profiles,
+      messageTree: this.messageTree
+    };
+    return JSON.stringify(gameState, null, 2);
+  }
+
+  toggleDrawer(windowName: string) {
+    if (this.drawerWindow != windowName) {
+      this.drawerWindow = windowName;
+      this.isDrawerOpen = true;
+    } else {
+      this.isDrawerOpen = false;
+      this.drawerWindow = "None";
+    }
   }
 
   saveToCookie() {

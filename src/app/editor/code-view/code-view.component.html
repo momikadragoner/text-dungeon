@@ -1,0 +1,15 @@
+<div class="code-view rounded">
+  <div class="header d-flex justify-content-between">
+    <div class="w-100 code-title">
+      Game Data
+    </div>
+    <span class="w-100 btn-copy text-end" (click)="copyToClipboard()">
+      <button mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </span>
+  </div>
+  <pre>
+    <code>{{ code }}</code>
+  </pre>
+</div>

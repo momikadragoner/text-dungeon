@@ -6,12 +6,17 @@
                     close
                 </span>
             </button>
-            <span class="title">Overview</span>
+            <span class="title">{{ drawerWindow }}</span>
         </mat-toolbar>
         <div class="container">
-            <h2 class="heading">Graph</h2>
-            <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
-            <profile-list-view [profiles]="profiles"></profile-list-view>
+            <!-- <h2 class="heading">Graph</h2> -->
+            @if (drawerWindow == 'Graph') {
+              <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
+            } @else if (drawerWindow == 'Profiles') {
+              <profile-list-view [profiles]="profiles"></profile-list-view>
+            } @else {
+              <code-view [code]="JsonGameState"></code-view>
+            }
         </div>
     </mat-drawer>
     <mat-drawer-content>
@@ -61,8 +66,14 @@
                         </mat-menu>
                         <mat-menu #view="matMenu">
                             <button mat-menu-item>
-                                <span (click)="isDrawerOpen=!isDrawerOpen">Overview panel</span>
+                                <span (click)="toggleDrawer('Graph')">Graph</span>
                             </button>
+                            <button mat-menu-item>
+                              <span (click)="toggleDrawer('Json')">JSON</span>
+                          </button>
+                          <button mat-menu-item>
+                            <span (click)="toggleDrawer('Profiles')">Profiles</span>
+                        </button>
                         </mat-menu>
                         <mat-menu #select="matMenu">
                             <button mat-menu-item>
