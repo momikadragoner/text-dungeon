@@ -96,7 +96,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
   ];
   profiles: ContactProfile[] = [{ id: 'contact-one', username: 'Contact One', color: 'blue' }]
 
-  selectedMessageId: string | undefined;
+  selected: string[] = [];
 
   messagePath: Message[] = [];
 
@@ -153,17 +153,19 @@ export class EditorPageComponent implements OnInit, OnChanges {
   }
 
   addMessage(e: Message) {
-    const prevId = this.selectedMessageId ?? this.messagePath[this.messagePath.length - 1]?.id;
+    console.log(this.selected);
+
+    const prevId = this.selected[0] ?? this.messagePath[this.messagePath.length - 1]?.id;
     if (this.messageTreeService.addMessage(e, prevId, this.selectedOptions)) {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      this.snackBar.open("Message could not be added", "Close", { horizontalPosition: 'end' })
+      this.snackBar.open("Message could not be added.", "Close", { horizontalPosition: 'end' })
     }
   }
 
   addOption(e: ResponseOption) {
-    const prevId = this.selectedMessageId ?? this.messagePath[this.messagePath.length - 1]?.id;
+    const prevId = this.selected[0] ?? this.messagePath[this.messagePath.length - 1]?.id;
     const isNewFork = !this.messageTreeService.getMessageById(prevId)?.showOptions;
     const newOptionId = this.messageTreeService.addOption(e, prevId);
     if (newOptionId != undefined) {
@@ -173,7 +175,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      this.snackBar.open("Option could not be added", "Close", { horizontalPosition: 'end' })
+      this.snackBar.open("Option could not be added.", "Close", { horizontalPosition: 'end' })
     }
   }
 
@@ -216,8 +218,11 @@ export class EditorPageComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
+        console.log(result);
+        
         this.messageTreeService.editMessage(result);
         this.messageTreeService.takeMessagePath(this.selectedOptions);
+        this.saveToCookie();
       }
     });
   }
@@ -229,11 +234,15 @@ export class EditorPageComponent implements OnInit, OnChanges {
   }
 
   deleteMessage(e: { message: Message, prev: Message }) {
+    if (e.prev == undefined) {
+      this.snackBar.open("Can't delete root message, please edit instead.", "Close", { horizontalPosition: 'end' })
+      return;
+    }
     if (this.messageTreeService.deleteMessage(e.message, e.prev.id, this.selectedOptions)) {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
       this.saveToCookie();
     } else {
-      this.snackBar.open("Could not delete message", "Close", { horizontalPosition: 'end' })
+      this.snackBar.open("Could not delete message.", "Close", { horizontalPosition: 'end' })
     }
   }
 

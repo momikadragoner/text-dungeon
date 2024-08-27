@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, output, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Message } from '../../game/model/message.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -59,6 +59,8 @@ export class MessageListViewComponent implements OnChanges {
   @Output() openNewLoopDialogEvent = new EventEmitter<Message>();
   @Output() openEditMessageDialogEvent = new EventEmitter<Message>();
   @Output() deleteMessageEvent = new EventEmitter<{ message: Message, prev: Message }>();
+  @Input() selected:string[] = [];
+  @Output() selectedChange = new EventEmitter<string[]>();
 
   @Input() choiceForm = this.formBuilder.group({
     choices: this.formBuilder.array([]),
@@ -130,6 +132,10 @@ export class MessageListViewComponent implements OnChanges {
       }
     }
     this.messagesChange.emit(this.messages);
+  }
+
+  select(id:string) {
+    this.selected = [id];
   }
 
   openDialog(message: Message) {

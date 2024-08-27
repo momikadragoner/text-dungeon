@@ -66,10 +66,10 @@
                         </mat-menu>
                         <mat-menu #select="matMenu">
                             <button mat-menu-item>
-                                <span (click)="selectedMessageId = '0'">First</span>
+                                <span (click)="selected = [messagePath[0].id]">First</span>
                             </button>
                             <button mat-menu-item>
-                                <span (click)="selectedMessageId = messagePath[messagePath.length-1].id">Last</span>
+                                <span (click)="selected = [messagePath[messagePath.length-1].id]">Last</span>
                             </button>
                         </mat-menu>
                         <div class="form shadow">

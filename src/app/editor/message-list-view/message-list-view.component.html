@@ -7,22 +7,24 @@
             <div formArrayName="choices">
                 <mat-accordion>
                     @if (messages.length == 0) {
-                        <mat-card class="arrive message-card not-found-container" appearance="outlined">
-                            <mat-card-header class="d-flex justify-content-center">
-                                <mat-card-title>
-                                    Your Storyline Begins Here
-                                </mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <p>
-                                    Start by adding a new contact and then send some messages!
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
+                    <mat-card class="arrive message-card not-found-container" appearance="outlined">
+                        <mat-card-header class="d-flex justify-content-center">
+                            <mat-card-title>
+                                Your Storyline Begins Here
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Start by adding a new contact and then send some messages!
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
                     }
                     @for ( message of messages; track $index) {
                     <div @arrivingMessages>
-                        <mat-card [id]="message.id" class="arrive message-card" appearance="outlined">
+                        <mat-card [id]="message.id" (click)="select(message.id)"
+                            class="arrive message-card {{selected.includes(message.id) ? 'selected' : '' }}"
+                            appearance="outlined">
                             <mat-card-header class="d-flex justify-content-between">
                                 <mat-card-subtitle>{{message.sender}}</mat-card-subtitle>
                                 <button mat-icon-button class="btn-more" [matMenuTriggerFor]="cardMoreMenu">
