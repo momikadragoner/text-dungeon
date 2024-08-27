@@ -1,0 +1,88 @@
+$primary: #1F2F16;
+$primary-light: #395B50;
+
+/* CSS HEX */
+// --ash-gray: #C9D2B7ff;
+// --ash-gray-2: #B7B8A6ff;
+// --timberwolf: #CFD2CBff;
+// --seasalt: #F9FAF9ff;
+// --timberwolf-2: #D5DAD3ff;
+
+.text-message {
+  font-size: 2.3rem;
+  border-radius: 2.3rem;
+  padding: .8rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1.5rem;
+  background-image: linear-gradient($primary-light, $primary);
+  background-size: cover;
+  background-position: center;
+  // background-attachment: fixed;
+  color: white;
+}
+
+.text-check {
+  vertical-align: bottom;
+  border-radius: 1rem;
+  background-color: $primary;
+  color: white;
+  padding: .1rem;
+  margin-bottom: -.2rem;
+}
+
+.dungeon-text {
+  font-size: larger;
+}
+
+.logo {
+  // margin-bottom: 3rem;
+}
+
+.btn-action {
+  // background: #ECFADC;
+  background-image: linear-gradient($primary-light, $primary);
+  color: white;
+  // background: $primary-light;
+  // color: $primary;
+  margin: 1rem;
+  border-radius: 2rem;
+}
+
+.bg {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  // background-image: linear-gradient($primary-light, $primary);
+//   background: rgb(236,250,220);
+// background: radial-gradient(circle, rgba(236,250,220,1) 0%,  rgba(147,181,147,1) 100%);
+//   background: rgb(183,208,150);
+//   background: radial-gradient(circle, rgba(183,208,150,1) 0%, rgba(180,191,159,1) 80%, rgba(162,168,144,1) 100%); ff
+
+  // background: rgb(236,250,220);
+  // background: radial-gradient(circle, rgba(236,250,220,1) 0%, rgba(196,222,164,1) 73%, rgba(174,220,174,1) 100%);
+
+  // background: rgb(236,250,220);
+  background: radial-gradient(circle, rgba(236,250,220,1) 0%, #9fd4a3 90%);
+}
+
+.content {
+  margin-top: 5rem;
+}
+
+.bg-image {
+  background-image: url('/bg.png');
+  position: absolute;
+  background-size: cover;
+  background-position: center top;
+  width: 100%;
+  height: 100%;
+}
+
+.frosted-glass {
+  border: none;
+  background-color: rgba(255, 255, 255, .15);
+  backdrop-filter: blur(10px);
+}

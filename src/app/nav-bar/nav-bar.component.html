@@ -5,9 +5,9 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Dungeon Texter</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/">Play</a>
-      <a mat-list-item routerLink="/editor">Create</a>
-      <!-- <a mat-list-item href="#">Link 3</a> -->
+      <a mat-list-item class="btn-nav" routerLink="/">Home</a>
+      <a mat-list-item class="btn-nav" routerLink="/play">Play</a>
+      <a mat-list-item class="btn-nav" routerLink="/editor">Create</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
