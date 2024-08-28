@@ -7,6 +7,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { ContactProfile } from '../game/model/profile.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { GameData } from '../game/model/game-data.model';
 
 @Component({
   selector: 'messages',
@@ -59,13 +60,24 @@ export class MessagesComponent implements OnChanges {
   responseBoxVisible = false;
 
   messages: Message[] = [];
+  responses: ResponseOption[] = [];
+  selectedChatIndex = 0;
 
-  @Input() profiles: ContactProfile[] = [];
+  @Input() gameData: GameData | undefined;
   @Input() startPoint: string = '0';
-  @Input() messageTree: Message[] = [];
   @Input() inDevMode: boolean = false;
 
-  responses: ResponseOption[] = [];
+  get profiles(): ContactProfile[] {
+    return this.gameData?.profiles ?? [];
+  }
+
+  get messageTree(): Message[] {
+    return this.gameData?.chats[this.selectedChatIndex].messageTree ?? [];
+  }
+
+  get chatName():string {
+    return this.gameData?.chats[this.selectedChatIndex].chatName ?? 'None';
+  }
 
   respond(id: string): void {
     let resp: ResponseOption | undefined = this.responses.find(x => x.id == id);

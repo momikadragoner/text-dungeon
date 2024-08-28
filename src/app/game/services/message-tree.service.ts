@@ -172,6 +172,7 @@ export class MessageTreeService {
       }
       node = this._messageTree.find(x => x.id == next);
       if (node == undefined) return orderedMessagePath;
+      node.isLoop = false;
       orderedMessagePath.push(node);
       next = node.next;
       if (node.showOptions && choices != undefined) {

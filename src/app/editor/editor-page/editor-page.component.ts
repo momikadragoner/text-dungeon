@@ -31,7 +31,7 @@ import { ContactProfile } from '../../game/model/profile.model';
 import { ProfileDialogComponent } from '../dialog/profile-dialog/profile-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileListViewComponent } from "../profile/profile-list-view/profile-list-view.component";
-import { GameState } from '../../game/model/game-state.model';
+import { GameData } from '../../game/model/game-data.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CodeViewComponent } from "../code-view/code-view.component";
 @Component({
@@ -63,49 +63,50 @@ import { CodeViewComponent } from "../code-view/code-view.component";
 })
 export class EditorPageComponent implements OnInit, OnChanges {
 
-  // graph: Node[] = [
-  //   { id: 'start', edges: ['1', '2', '5'] },
-  //   { id: '1', edges: ['3', '4'] },
-  //   { id: '2', edges: ['5', 'start'] },
-  //   { id: '3', edges: ['1'] },
-  //   { id: '4', edges: ['5'] },
-  //   { id: '5', edges: ['4'] },
-  //   { id: '6', edges: ['7', '8'] },
-  //   { id: '7', edges: [] },
-  //   { id: '8', edges: [] },
-  //   { id: '9', edges: [] },
-  // ];
-  graph: Node[] = [];
-  messageTree: Message[] = [
-    // { id: 'M-0', body: "Hello Word!", sender: "conact", next: 'M-1', wait: 0, showOptions: false, responseOptions: [] },
-    // {
-    //   id: 'M-1', body: "It's a beautiful day today!!", sender: "contact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
-    //     { id: 'O0-1', next: 'M-2', text: "Good Morning!" },
-    //     { id: 'O1-1', next: 'M-3', text: "It sure is!" },
-    //     { id: 'O2-1', next: 'M-3', text: "..." }
-    //   ]
-    // },
-    // {
-    //   id: 'M-2', body: "To you too!", sender: "conact", next: undefined, wait: 1000, showOptions: true, responseOptions: [
-    //     { id: 'O0-2', next: 'M-4', text: "Have you heard the news" },
-    //     { id: 'O1-2', next: 'M-1', text: "What if..." }
-    //   ]
-    // },
-    // { id: 'M-3', body: "I just love basking in the sun!", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
-    // { id: 'M-4', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: 'M-5', wait: 1000, showOptions: false, responseOptions: [] },
-    // { id: 'M-5', body: "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet", sender: "conact", next: undefined, wait: 1000, showOptions: false, responseOptions: [] },
-  ];
   profiles: ContactProfile[] = [{ id: 'contact-one', username: 'Contact One', color: 'blue' }]
 
-  selected: string[] = [];
+  _messageTree: Message[] = [];
 
+  get messageTree(): Message[] {
+    return this._messageTree;
+  }
+
+  set messageTree(value:Message[]) {
+    this._messageTree = value;
+    this.gameData.chats[0].messageTree = this.messageTree;
+  }
+
+  _chatName: string = 'New Chat';
+
+  get chatName(): string {
+    return this._chatName;
+  }
+
+  set chatName(value:string) {
+    this._chatName = value;
+    this.gameData.chats[0].chatName = this._chatName;
+  }
+
+  selected: string[] = [];
   messagePath: Message[] = [];
+
+  graph: Node[] = [];
 
   nodeStyle: nodeStyle = { height: '80px', width: '80px', margin: '50px', classList: '' };
   edgeStyle: edgeStyle = { strokeColor: 'black', strokeWidth: '4', doubleEdgeOffset: 30 };
 
   visualNodes: VisualNode[] = [];
   visualEdges: VisualEdge[] = [];
+
+  gameData: GameData = {
+    profiles: this.profiles,
+    chats: [
+      {
+        chatName: this.chatName,
+        messageTree: this.messageTree,
+      }
+    ]
+  };
 
   isDrawerOpen: boolean = false;
   drawerWindow: string = 'None';
@@ -118,12 +119,17 @@ export class EditorPageComponent implements OnInit, OnChanges {
     return this.choiceForm.get('choices') as FormArray;
   }
 
+  addChoice(value: string) {
+    this.choices.push(this.formBuilder.control(value));
+  }
+
   get selectedOptions() {
     return this.choices.value;
   }
 
-  addChoice(value: string) {
-    this.choices.push(this.formBuilder.control(value));
+  get JsonGameState() {
+    const gameState: GameData = this.gameData;
+    return JSON.stringify(gameState, null, 2);
   }
 
   constructor(
@@ -155,8 +161,6 @@ export class EditorPageComponent implements OnInit, OnChanges {
   }
 
   addMessage(e: Message) {
-    console.log(this.selected);
-
     const prevId = this.selected[0] ?? this.messagePath[this.messagePath.length - 1]?.id;
     if (this.messageTreeService.addMessage(e, prevId, this.selectedOptions)) {
       this.messagePath = this.messageTreeService.takeMessagePath(this.selectedOptions);
@@ -264,14 +268,6 @@ export class EditorPageComponent implements OnInit, OnChanges {
     this.saveToCookie();
   }
 
-  get JsonGameState() {
-    const gameState: GameState = {
-      profiles: this.profiles,
-      messageTree: this.messageTree
-    };
-    return JSON.stringify(gameState, null, 2);
-  }
-
   toggleDrawer(windowName: string) {
     if (this.drawerWindow != windowName) {
       this.drawerWindow = windowName;
@@ -283,19 +279,16 @@ export class EditorPageComponent implements OnInit, OnChanges {
   }
 
   saveToCookie() {
-    const gameState: GameState = {
-      profiles: this.profiles,
-      messageTree: this.messageTree
-    };
+    const gameState: GameData = this.gameData;
     this.cookieService.set('gameState', JSON.stringify(gameState));
   }
 
   loadFromCookie(): boolean {
     let cookieValue = this.cookieService.get('gameState');
     try {
-      const gameState: GameState = (JSON.parse(cookieValue));
+      const gameState: GameData = (JSON.parse(cookieValue));
       this.profiles = gameState.profiles;
-      this.messageTree = gameState.messageTree;
+      this.messageTree = gameState.chats[0].messageTree;
       return true;
     } catch (e) {
       return false;
