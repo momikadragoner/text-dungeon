@@ -73,10 +73,8 @@ export class MessageListViewComponent implements OnChanges {
 
   colors: string[] = ['Red', 'Yellow', 'Green', 'Blue'];
 
-  selectedMessage:string = '';
-
   constructor(private formBuilder: FormBuilder, private router: Router) { }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     let index = 0;
     const msgChange = changes['messages'];
@@ -85,7 +83,7 @@ export class MessageListViewComponent implements OnChanges {
     //   this.choices.removeAt(index);
     // }
     // console.log(changes);
-    if (!msgChange.firstChange) {
+    if (msgChange != undefined && !msgChange.firstChange) {
       const prevValue: Message[] = msgChange.previousValue;
       const prevOptionMessgaes = prevValue.filter(m => m.showOptions == true);
       const delta = optionMessages.length - prevOptionMessgaes.length;
@@ -134,8 +132,17 @@ export class MessageListViewComponent implements OnChanges {
     this.messagesChange.emit(this.messages);
   }
 
-  select(id:string) {
-    this.selected = [id];
+  select(event:any, id:string) {
+    if (this.selected.includes(id)) {
+      delete this.selected[this.selected.indexOf(id)];
+    } else {
+      if(event.shiftKey) {
+        this.selected.push(id);
+      } else {
+        this.selected = [id];
+      }
+    }
+    this.selectedChange.emit(this.selected);
   }
 
   openDialog(message: Message) {

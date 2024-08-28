@@ -1,111 +1,113 @@
 <mat-drawer-container class="main">
-    <mat-drawer mode="side" position="end" [opened]="isDrawerOpen">
-        <mat-toolbar>
-            <button (click)="isDrawerOpen = false" mat-icon-button>
-                <span class="material-symbols-outlined">
-                    close
-                </span>
+  <mat-drawer mode="side" position="end" [opened]="isDrawerOpen">
+    <mat-toolbar>
+      <button (click)="isDrawerOpen = false" mat-icon-button>
+        <span class="material-symbols-outlined">
+          close
+        </span>
+      </button>
+      <span class="title">{{ drawerWindow }}</span>
+    </mat-toolbar>
+    <div class="container">
+      <!-- <h2 class="heading">Graph</h2> -->
+      @if (drawerWindow == 'Graph') {
+      <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
+      } @else if (drawerWindow == 'Profiles') {
+      <profile-list-view [profiles]="profiles"></profile-list-view>
+      } @else {
+      <code-view [code]="JsonGameState"></code-view>
+      }
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100"
+      (selectedTabChange)="onSelectedTabChange($event)">
+      <mat-tab label="Write" bodyClass="w-100 h-100 height">
+        <message-list-view [(choiceForm)]="choiceForm" (pathChange)="onPathChange($event)" [(messages)]="messagePath"
+          (openNewLoopDialogEvent)="openDialog($event)" (openEditMessageDialogEvent)="openEditDialog($event)"
+          (deleteMessageEvent)="deleteMessage($event)" [(selected)]="selected" class="reverse"></message-list-view>
+        <div class="bottom d-flex justify-content-center">
+          <div>
+            <button class="row-button" mat-raised-button (click)="openProfileDialog()">
+              <mat-icon>
+                person_add
+              </mat-icon>
+              New Contact
             </button>
-            <span class="title">{{ drawerWindow }}</span>
-        </mat-toolbar>
-        <div class="container">
-            <!-- <h2 class="heading">Graph</h2> -->
-            @if (drawerWindow == 'Graph') {
-              <list-view [visualNodes]="visualNodes" [visualEdges]="visualEdges"></list-view>
-            } @else if (drawerWindow == 'Profiles') {
-              <profile-list-view [profiles]="profiles"></profile-list-view>
-            } @else {
-              <code-view [code]="JsonGameState"></code-view>
-            }
+            <button (click)="openDialog()" class="row-button" mat-raised-button>
+              <mat-icon>
+                link
+              </mat-icon>
+              Link
+            </button>
+            <button mat-raised-button class="row-button" [matMenuTriggerFor]="cardMoreMenu">
+              <mat-icon>more_vert</mat-icon>
+              More
+            </button>
+            <mat-menu #cardMoreMenu="matMenu">
+              <button mat-menu-item [matMenuTriggerFor]="file">
+                <span>File</span>
+              </button>
+              <button mat-menu-item [matMenuTriggerFor]="view">
+                <span>View</span>
+              </button>
+              <button mat-menu-item [matMenuTriggerFor]="select">
+                <span>Select</span>
+              </button>
+            </mat-menu>
+            <mat-menu #file="matMenu">
+              <button mat-menu-item>
+                <span>Save</span>
+              </button>
+              <button mat-menu-item>
+                <span>Load</span>
+              </button>
+            </mat-menu>
+            <mat-menu #view="matMenu">
+              <button mat-menu-item (click)="toggleDrawer('Graph')">
+                <span>Graph</span>
+              </button>
+              <button mat-menu-item (click)="toggleDrawer('Json')">
+                <span>JSON</span>
+              </button>
+              <button mat-menu-item (click)="toggleDrawer('Profiles')">
+                <span>Profiles</span>
+              </button>
+            </mat-menu>
+            <mat-menu #select="matMenu">
+              <button mat-menu-item (click)="selected = [messagePath[0].id]">
+                <span>First</span>
+              </button>
+              <button mat-menu-item (click)="selected = [messagePath[messagePath.length-1].id]">
+                <span>Last</span>
+              </button>
+              <button mat-menu-item (click)="selected = []">
+                <span>None</span>
+              </button>
+            </mat-menu>
+            <div class="form shadow">
+              <message-form (messageChange)="addMessage($event)" (newResponseOption)="addOption($event)"
+                [profiles]="profiles"></message-form>
+            </div>
+          </div>
         </div>
-    </mat-drawer>
-    <mat-drawer-content>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="h-100"
-            (selectedTabChange)="onSelectedTabChange($event)">
-            <mat-tab label="Write" bodyClass="w-100 h-100 height">
-                <message-list-view [(choiceForm)]="choiceForm" (pathChange)="onPathChange($event)"
-                    [(messages)]="messagePath" (openNewLoopDialogEvent)="openDialog($event)"
-                    (openEditMessageDialogEvent)="openEditDialog($event)" (deleteMessageEvent)="deleteMessage($event)"
-                    class="reverse"></message-list-view>
-                <div class="bottom d-flex justify-content-center">
-                    <div>
-                        <button class="row-button" mat-raised-button (click)="openProfileDialog()">
-                            <mat-icon>
-                                person_add
-                            </mat-icon>
-                            New Contact
-                        </button>
-                        <button (click)="openDialog()" class="row-button" mat-raised-button>
-                            <mat-icon>
-                                link
-                            </mat-icon>
-                            Link Back
-                        </button>
-                        <button mat-raised-button class="row-button" [matMenuTriggerFor]="cardMoreMenu">
-                            <mat-icon>more_vert</mat-icon>
-                            More
-                        </button>
-                        <mat-menu #cardMoreMenu="matMenu">
-                            <button mat-menu-item [matMenuTriggerFor]="file">
-                                <span>File</span>
-                            </button>
-                            <button mat-menu-item [matMenuTriggerFor]="view">
-                                <span>View</span>
-                            </button>
-                            <button mat-menu-item [matMenuTriggerFor]="select">
-                                <span>Select</span>
-                            </button>
-                        </mat-menu>
-                        <mat-menu #file="matMenu">
-                            <button mat-menu-item>
-                                <span>Save</span>
-                            </button>
-                            <button mat-menu-item>
-                                <span>Load</span>
-                            </button>
-                        </mat-menu>
-                        <mat-menu #view="matMenu">
-                            <button mat-menu-item>
-                                <span (click)="toggleDrawer('Graph')">Graph</span>
-                            </button>
-                            <button mat-menu-item>
-                              <span (click)="toggleDrawer('Json')">JSON</span>
-                          </button>
-                          <button mat-menu-item>
-                            <span (click)="toggleDrawer('Profiles')">Profiles</span>
-                        </button>
-                        </mat-menu>
-                        <mat-menu #select="matMenu">
-                            <button mat-menu-item>
-                                <span (click)="selected = [messagePath[0].id]">First</span>
-                            </button>
-                            <button mat-menu-item>
-                                <span (click)="selected = [messagePath[messagePath.length-1].id]">Last</span>
-                            </button>
-                        </mat-menu>
-                        <div class="form shadow">
-                            <message-form (messageChange)="addMessage($event)" (newResponseOption)="addOption($event)"
-                                [profiles]="profiles"></message-form>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Graph">
-                @defer {
-                <graph-visual class="height" [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
-                } @placeholder {
-                <mat-spinner></mat-spinner>
-                }
-            </mat-tab>
-            <mat-tab label="Preview">
-                <phone-screen>
-                    @defer {
-                    <messages [messageTree]="messageTree" [profiles]="profiles"></messages>
-                    } @placeholder {
-                    <mat-spinner></mat-spinner>
-                    }
-                </phone-screen>
-            </mat-tab>
-        </mat-tab-group>
-    </mat-drawer-content>
+      </mat-tab>
+      <mat-tab label="Graph">
+        @defer {
+        <graph-visual class="height" [visualNodes]="visualNodes" [visualEdges]="visualEdges"></graph-visual>
+        } @placeholder {
+        <mat-spinner></mat-spinner>
+        }
+      </mat-tab>
+      <mat-tab label="Preview">
+        <phone-screen>
+          @defer {
+          <messages [messageTree]="messageTree" [profiles]="profiles"></messages>
+          } @placeholder {
+          <mat-spinner></mat-spinner>
+          }
+        </phone-screen>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-drawer-content>
 </mat-drawer-container>

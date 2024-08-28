@@ -22,7 +22,7 @@
                     }
                     @for ( message of messages; track $index) {
                     <div @arrivingMessages>
-                        <mat-card [id]="message.id" (click)="select(message.id)"
+                        <mat-card [id]="message.id" (click)="select($event, message.id)"
                             class="arrive message-card {{selected.includes(message.id) ? 'selected' : '' }}"
                             appearance="outlined">
                             <mat-card-header class="d-flex justify-content-between">

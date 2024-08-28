@@ -33,6 +33,7 @@ export class MessageTreeService {
   }
 
   private addMessageAfterMessage(newMessage: Message, prevMessage: Message): boolean {
+    newMessage.next = prevMessage.next;
     prevMessage.next = newMessage.id;
     this._messageTree.push(newMessage);
     return true;
@@ -41,6 +42,7 @@ export class MessageTreeService {
   private addMessageAfterOption(newMessage: Message, prevId: string): boolean {
     let prevOption = this.getResponseOptionById(prevId);
     if (prevOption == undefined) return false;
+    newMessage.next = prevOption.next;
     prevOption.next = newMessage.id;
     this._messageTree.push(newMessage);
     return true;

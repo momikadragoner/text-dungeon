@@ -31,11 +31,11 @@ export class EditMessageDialogComponent {
     wait: [this.message.wait, Validators.required],
     next: [this.message.next],
     showOptions: [this.message.showOptions],
-    responseOptions: this.formBuilder.array([
-      this.formBuilder.group({
-        text: [this.message.responseOptions[0].text]
-      })
-    ])
+    // responseOptions: this.formBuilder.array([
+    //   this.formBuilder.group({
+    //     text: [this.message.responseOptions[0].text]
+    //   })
+    // ])
   })
 
   onSaveClick() {
