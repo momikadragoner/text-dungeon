@@ -1,38 +1,48 @@
-<div class="">
-    <div class="header d-flex justify-content-center">
-        <span class="fw-bold contact">Contact</span>
-    </div>
+@if (inDevMode) {
+<div class="absolute">
+  <div class="test-control" (click)="refresh()">
+    <button mat-icon-button>
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+</div>
+}
+
+<div>
+  <div class="header d-flex justify-content-center">
+    <span class="fw-bold contact">Contact</span>
+  </div>
 </div>
 <div class="scroll container reverse">
-    <div>
-        <div class="padding-top"></div>
-        @for (message of messages; track $index) {
-        <div @arrivingMessages>
-            @if (showUserName(message, $index)) {
-            <div class="d-flex justify-content-start">
-                <span class="contact-name">{{getUsername(message.sender)}}</span>
-            </div>
-            }
-            <div class="d-flex {{messageJustify(message.sender)}}">
-                <div class="color {{getColor(message, $index)}}"></div>
-                <div class="message {{messageStyle(message.id, $index)}}">{{ message.body }}</div>
-            </div>
-        </div>
-        }
-        <div class="padding-bottom"></div>
-        @if (responseBoxVisible) {
-        <div class="padding"></div>
-        }
+  <div>
+    <div class="padding-top"></div>
+    @for (message of messages; track $index) {
+    <div @arrivingMessages>
+      @if (showUserName(message, $index)) {
+      <div class="d-flex justify-content-start">
+        <span class="contact-name">{{getUsername(message.sender)}}</span>
+      </div>
+      }
+      <div class="d-flex {{messageJustify(message.sender)}}">
+        <div class="color {{getColor(message, $index)}}"></div>
+        <div class="message {{messageStyle(message.id, $index)}}">{{ message.body }}</div>
+      </div>
     </div>
+    }
+    <div class="padding-bottom"></div>
+    @if (responseBoxVisible) {
+    <div class="padding"></div>
+    }
+  </div>
 </div>
 <div class="inside"></div>
 @if (responseBoxVisible) {
 <div @changeResponseBoxVisibility class="response-box bottom w-100 s">
-    <mat-accordion>
-        @for (response of responses; track response.id) {
-        <button (click)="respond(response.id)" class="response-button w-90" mat-fab extended>{{response.text}}</button>
-        }
-    </mat-accordion>
+  <mat-accordion>
+    @for (response of responses; track response.id) {
+    <button (click)="respond(response.id)" class="response-button w-90" mat-fab extended>{{response.text}}</button>
+    }
+  </mat-accordion>
 </div>
 }
 <!-- <div class="bottom" style="display: flex; justify-content: center;">

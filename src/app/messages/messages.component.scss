@@ -183,3 +183,11 @@ $sys-bg: white;
 .none-end {
     margin-bottom: .5rem;
 }
+
+.test-control {
+  background-color: white;
+  border: .01rem $black solid;
+  border-radius: 1rem;
+  margin: .3rem;
+  padding: .3rem;
+}
