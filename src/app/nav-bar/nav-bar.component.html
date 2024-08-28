@@ -1,17 +1,36 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Dungeon Texter</mat-toolbar>
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <!-- <mat-toolbar>Dungeon Texter</mat-toolbar> -->
     <mat-nav-list>
-      <a mat-list-item class="btn-nav" routerLink="/">Home</a>
-      <a mat-list-item class="btn-nav" routerLink="/play">Play</a>
-      <a mat-list-item class="btn-nav" routerLink="/editor">Create</a>
+      <a mat-list-item lines="2" class="btn-nav text-center" routerLink="/">
+        <div matListItemTitle>
+          <span class="material-symbols-outlined">home</span>
+        </div>
+        <div matListItemLine>
+          Home
+        </div>
+      </a>
+      <a mat-list-item lines="2" class="btn-nav text-center" routerLink="/play">
+        <div matListItemTitle>
+          <span class="material-symbols-outlined">play_arrow</span>
+        </div>
+        <div matListItemLine>
+          Play
+        </div>
+      </a>
+      <a mat-list-item lines="2" class="btn-nav text-center" routerLink="/editor">
+        <div matListItemTitle>
+          <span class="material-symbols-outlined">draw</span>
+        </div>
+        <div matListItemLine>
+          Create
+        </div>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <router-outlet/>
+    <router-outlet />
     <!-- <app-phone-screen></app-phone-screen> -->
   </mat-sidenav-content>
 </mat-sidenav-container>
