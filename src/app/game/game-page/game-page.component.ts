@@ -17,7 +17,7 @@ export class GamePageComponent {
 
   select(selectedGame:string) {
     this.selectedGame = selectedGame;
-    this.backgroundColor = 'white';
+    this.backgroundColor = '#FFFFFF';
     this.gameSelectMenuOpen = false;
   }
 }

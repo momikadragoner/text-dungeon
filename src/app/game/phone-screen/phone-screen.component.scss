@@ -13,6 +13,7 @@
     top: 0;
     padding: 0;
     overflow: hidden;
+    // transition: background-color .1s;
 }
 
 .background {
@@ -35,6 +36,7 @@
     padding-top: 1rem;
     margin-left: 2rem;
     margin-right: 2rem;
+    transition: color .5s;
 }
 
 .icons>span {

@@ -24,7 +24,9 @@
       </div>
       }
       <div class="d-flex {{messageJustify(message.sender)}}">
-        <div class="color {{getColor(message, $index)}}"></div>
+        @if (message.sender != 'system') {
+          <div class="color {{getColor(message, $index)}}"></div>
+        }
         <div class="message {{messageStyle(message.id, $index)}}">{{ message.body }}</div>
       </div>
     </div>
