@@ -172,7 +172,7 @@ export class MessagesComponent implements OnChanges, OnInit {
 
   showUserName(m: Message, index: number) {
     const layer = this.layerDecide(this.messages, index);
-    return (layer == 'top' || layer == 'none' && m.sender != 'player' && m.sender != 'system');
+    return ((layer == 'top' || layer == 'none') && (m.sender != 'player' && m.sender != 'system'));
   }
 
   layerDecide(m: Message[], index: number): string {

@@ -63,14 +63,20 @@ import { CodeViewComponent } from "../code-view/code-view.component";
 })
 export class EditorPageComponent implements OnInit, OnChanges {
 
-  profiles: ContactProfile[] = [{ id: 'contact-one', username: 'Contact One', color: 'blue' }]
-
   get messageTree(): Message[] {
     return this.gameData.chats[0].messageTree
   }
 
   set messageTree(value:Message[]) {
     this.gameData.chats[0].messageTree = value;
+  }
+
+  get profiles(): ContactProfile[] {
+    return this.gameData.profiles;
+  }
+
+  set profiles(value:ContactProfile[]) {
+    this.gameData.profiles = value;
   }
 
   get chatName(): string {
@@ -93,7 +99,7 @@ export class EditorPageComponent implements OnInit, OnChanges {
   visualEdges: VisualEdge[] = [];
 
   gameData: GameData = {
-    profiles: this.profiles,
+    profiles: [{ id: 'contact-one', username: 'Contact One', color: 'blue' }],
     chats: [
       {
         chatName: 'New Chat',

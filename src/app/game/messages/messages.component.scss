@@ -149,6 +149,7 @@ $sys-bg: white;
 .system {
     font-size: smaller;
     font-weight: bold;
+    text-align: center;
 }
 
 .mid-end {
@@ -185,9 +186,15 @@ $sys-bg: white;
 }
 
 .test-control {
+  position: absolute;
+  z-index: 2;
   background-color: white;
   border: .01rem $black solid;
   border-radius: 1rem;
   margin: .3rem;
   padding: .3rem;
+}
+
+.none, .color-gradient-undefined {
+  width: 0;
 }
