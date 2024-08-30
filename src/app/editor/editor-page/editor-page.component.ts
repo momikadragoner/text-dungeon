@@ -20,9 +20,9 @@ import { MessageService } from '../../game/services/message.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewLoopDialogComponent } from '../dialog/new-loop-dialog/new-loop-dialog.component';
 import { CookieService } from 'ngx-cookie-service';
-import { PhoneScreenComponent } from "../../phone-screen/phone-screen.component";
+import { PhoneScreenComponent } from "../../game/phone-screen/phone-screen.component";
 import { MatIconModule } from '@angular/material/icon';
-import { MessagesComponent } from "../../messages/messages.component";
+import { MessagesComponent } from "../../game/messages/messages.component";
 import { FormArray, FormBuilder } from '@angular/forms';
 import { MessageTreeService } from '../../game/services/message-tree.service';
 import { MatMenuModule } from '@angular/material/menu';
@@ -65,26 +65,20 @@ export class EditorPageComponent implements OnInit, OnChanges {
 
   profiles: ContactProfile[] = [{ id: 'contact-one', username: 'Contact One', color: 'blue' }]
 
-  _messageTree: Message[] = [];
-
   get messageTree(): Message[] {
-    return this._messageTree;
+    return this.gameData.chats[0].messageTree
   }
 
   set messageTree(value:Message[]) {
-    this._messageTree = value;
-    this.gameData.chats[0].messageTree = this.messageTree;
+    this.gameData.chats[0].messageTree = value;
   }
 
-  _chatName: string = 'New Chat';
-
   get chatName(): string {
-    return this._chatName;
+    return this.gameData.chats[0].chatName;
   }
 
   set chatName(value:string) {
-    this._chatName = value;
-    this.gameData.chats[0].chatName = this._chatName;
+    this.gameData.chats[0].chatName = value;
   }
 
   selected: string[] = [];
@@ -102,8 +96,8 @@ export class EditorPageComponent implements OnInit, OnChanges {
     profiles: this.profiles,
     chats: [
       {
-        chatName: this.chatName,
-        messageTree: this.messageTree,
+        chatName: 'New Chat',
+        messageTree: [],
       }
     ]
   };

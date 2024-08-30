@@ -1,13 +1,15 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { Message } from '../game/model/message.model';
+import { Message } from '../model/message.model';
 import { animate, query, stagger, state, style, transition, trigger } from '@angular/animations';
-import { ResponseOption } from '../game/model/response.model';
+import { ResponseOption } from '../model/response.model';
 import { MatAccordion } from '@angular/material/expansion';
-import { ContactProfile } from '../game/model/profile.model';
+import { ContactProfile } from '../model/profile.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { GameData } from '../game/model/game-data.model';
+import { GameData } from '../model/game-data.model';
+import { GameService } from '../services/game.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'messages',
@@ -47,14 +49,22 @@ import { GameData } from '../game/model/game-data.model';
     ])
   ]
 })
-export class MessagesComponent implements OnChanges {
+export class MessagesComponent implements OnChanges, OnInit {
 
-  constructor() {
+  constructor(private gameService: GameService) { }
+
+  ngOnInit(): void {
+    if (!this.inDevMode) {
+      this.gameService.getGameData(this.gameId).subscribe(data => {
+        this.gameData = data;
+        this.reciveMessage(this.startPoint);
+      })
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.messages = []
-    this.reciveMessage(this.startPoint);
+    // this.messages = []
+    // this.reciveMessage(this.startPoint);
   }
 
   responseBoxVisible = false;
@@ -63,7 +73,9 @@ export class MessagesComponent implements OnChanges {
   responses: ResponseOption[] = [];
   selectedChatIndex = 0;
 
+  gameDataObservable: Observable<GameData> | undefined;
   @Input() gameData: GameData | undefined;
+  @Input() gameId: string = '';
   @Input() startPoint: string = '0';
   @Input() inDevMode: boolean = false;
 

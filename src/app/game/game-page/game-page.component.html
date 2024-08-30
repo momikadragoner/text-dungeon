@@ -1,0 +1,7 @@
+<phone-screen [systemBackgroundColor]="backgroundColor">
+  @if (gameSelectMenuOpen) {
+    <game-selector (selectedGameChange)="select($event)" [backgroundColor]="backgroundColor"></game-selector>
+  } @else {
+    <messages [gameId]="selectedGame"></messages>
+  }
+</phone-screen>

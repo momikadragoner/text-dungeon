@@ -8,7 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { PhoneScreenComponent } from "../phone-screen/phone-screen.component";
+import { PhoneScreenComponent } from "../game/phone-screen/phone-screen.component";
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
